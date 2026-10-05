@@ -1,0 +1,203 @@
+KALAPRITI
+Interactive Exhibition Landing Page — Designer Brief
+“Loops of love, from hands to heart.”
+A QR/scan-based mini brand experience for the Kalapriti college exhibition stall.
+The page should feel warm, handmade, playful, premium and memorable.
+1. PROJECT OVERVIEW
+Kalapriti will have a stall at a college exhibition. Visitors will scan a QR code at the stall and land on a mobile-first Kalapriti landing page that introduces the brand through an interactive, story-driven experience.
+Core idea
+The landing page should feel like entering a tiny handmade world where yarn balls, crochet accessories and craft elements are alive. They welcome the visitor, introduce Kalapriti, show the brand story and products, and finally invite the visitor to connect on Instagram or contact the founder.
+Main user journey
+Scan QR code at the exhibition stall.
+Welcome animation: cute yarn balls/crochet accessories open a tiny door and welcome the visitor.
+Scroll → Vision & Mission.
+Scroll → Short Kalapriti brand story.
+Scroll → Product highlights with attractive product images.
+Scroll → Instagram follow CTA.
+Scroll → Founder/contact details and final thank-you message.
+1. OVERALL VISUAL DIRECTION
+Combine handmade warmth with a clean, modern landing-page experience.
+Element
+Direction
+Primary mood
+Cute, warm, handmade, whimsical, premium, welcoming
+Suggested palette
+Peachy pink, soft cream/off-white, olive green, subtle burgundy accents
+Background
+Soft cream/off-white with subtle paper/fabric/crochet texture
+Typography
+Stylish friendly display font for headings + clean sans-serif for body
+Illustration style
+Cute hand-drawn/crochet-inspired characters; avoid childish cartoon overload
+Design language
+Organic curves, yarn/thread lines, small floral/craft motifs, soft shadows
+Photography
+Clean, bright product photography with enough negative space
+Mobile priority
+Designed primarily for phone screens because visitors scan on mobile
+Important
+Do NOT make the page look like a generic e-commerce website. It should feel like a short interactive brand story/exhibition experience.
+1. SECTION 01 — THE WELCOME / MAGIC DOOR
+Objective
+Create an immediate emotional connection and make the visitor curious enough to scroll.
+Visual scene
+A small cute illustrated/3D-looking door is placed in the centre.
+Yarn balls, crochet hooks, flowers, tiny crochet accessories and/or yarn characters surround the door.
+The yarn balls/accessories have cute eyes, tiny hands and tiny legs.
+Characters should feel handmade rather than overly realistic.
+The Kalapriti name/logo should appear naturally within the scene.
+A soft yarn/thread path can visually guide the visitor toward the door.
+Animation sequence
+Page loads with a calm handmade background.
+Cute yarn characters enter/appear around the door.
+Characters look toward the visitor.
+The door opens slowly as if inviting the visitor inside.
+Characters wave or welcome the visitor.
+Kalapriti logo/name appears.
+Welcome message fades/slides in.
+A small animated “Scroll to explore” indicator appears.
+Exact on-screen copy
+WELCOME TO KALAPRITI 
+“loops of love from hands to heart”
+Optional small CTA: “Come inside ↓”
+1. SECTION 02 — VISION & MISSION
+As the visitor scrolls, the door scene transitions into the brand introduction. A yarn/thread line can visually connect the sections.
+Vision
+To make handmade art a part of everyday life by creating meaningful, beautiful and personalized products that connect people through creativity, craftsmanship and emotion.
+Mission
+To create thoughtfully handcrafted crochet and personalized gifting products with love, creativity and attention to detail, while celebrating the value of handmade work and creating opportunities for skilled artisans and women.
+Design suggestion
+Show Vision and Mission as two soft cards or illustrated sections. Small yarn/crochet icons can animate gently when they enter the viewport.
+1. SECTION 03 — THE KALAPRITI STORY
+Keep this section short enough to read on a phone but emotional enough to communicate the heart behind the brand.
+Suggested brand story copy
+Kalapriti was born from a simple love for handmade art — the belief that something made by hand carries a feeling that mass-produced products cannot replace.
+What started with yarn, a crochet hook and countless little loops grew into a world of handmade dolls, flowers, idols, keychains, gifts and personalized creations.
+Every Kalapriti creation is made patiently, thoughtfully and with love — because a handmade gift is not just a product; it becomes a memory.
+From one special gift to bulk orders and celebrations, Kalapriti brings creativity from our hands to your heart.
+Optional visual treatment
+Show a yarn thread travelling through the story.
+Use small illustrations of a crochet hook, yarn ball, flower and finished product.
+A short timeline-style animation can show: Yarn → Hands → Craft → Emotion → Kalapriti.
+Keep animation subtle so the story remains easy to read.
+1. SECTION 04 — PRODUCT HIGHLIGHTS
+This should be the most visually attractive product section. Use real Kalapriti product photographs wherever possible.
+Category
+What to show
+Crochet Dolls
+Customized couple dolls, character dolls and personalized dolls
+Crochet Flowers & Bouquets
+Handmade flowers and bouquets for gifting and special occasions
+Crochet Idols
+Handcrafted spiritual/decorative idols such as Hanumanji and Radha-Krishna creations
+Keychains & Accessories
+Cute personalized keychains and small crochet accessories
+Baby Collection
+Baby booties, rompers and other handmade baby products
+Festive & Gifting
+Rakhis, festive products, hampers, corporate gifts and customized orders
+Product layout
+Use a clean 2-column mobile grid or horizontal swipe carousel.
+Each product should have image + short product name.
+Avoid too much text.
+Use rounded image corners and soft shadows.
+Include a small “Custom orders available” message.
+If technically possible, product images can gently lift/scale when tapped.
+A LITTLE OF WHAT WE CREATE
+1. SECTION 05 — INSTAGRAM / FOLLOW KALAPRITI
+This is an important conversion section. Visitors should reach the Kalapriti Instagram profile with one tap.
+Create a beautiful Instagram-inspired CTA card.
+Use the official Instagram icon/logo according to current platform usage guidance.
+Add a small preview collage of Kalapriti products or Instagram-style photos.
+Include a prominent button: “Follow us on Instagram”.
+The entire CTA/button should be clickable.
+@kalapriti_
+Instagram destination: https://www.instagram.com/kalapriti_/
+1. SECTION 06 — FOUNDER / CONTACT
+The final section should feel personal and warm rather than corporate.
+MADE BY HAND. MADE WITH HEART.
+Kalapriti
+Founder: Tisha Vaghasiya
+Handcrafted Crochet • Personalized Gifting • Custom Creations
+Instagram: @kalapriti_
+Phone/WhatsApp: [INSERT NUMBER]
+Email: [INSERT EMAIL, IF REQUIRED]
+Thank you for stepping into our little world of yarn, creativity and love. ♡
+1. FINAL CALL-TO-ACTION
+Follow Kalapriti on Instagram
+Contact us for customized orders
+Optional: “Want something made just for you? Let’s create it together.”
+1. QR CODE / SCANNER REQUIREMENTS
+The QR code will be placed physically at the exhibition stall.
+QR code should open the landing page directly.
+Landing page must be mobile-first and responsive.
+Loading time should be kept low despite animations and product images.
+Use compressed WebP/optimized images where possible.
+Provide a clear fallback if animation does not load.
+Make all buttons large enough for easy mobile tapping.
+1. ANIMATION & INTERACTION NOTES FOR DESIGNER
+Use scroll-triggered animations rather than constant movement everywhere.
+Characters can blink, wave, bounce slightly or move their hands.
+The opening door is the hero animation and should be the most memorable interaction.
+Yarn/thread can act as a recurring transition element between sections.
+Product cards should have subtle hover/tap movement.
+Keep animations smooth and lightweight.
+Avoid excessive flashing or overly fast motion.
+Respect reduced-motion settings if supported.
+1. USER EXPERIENCE REQUIREMENTS
+Requirement
+Details
+Device
+Mobile-first; should also look good on desktop
+Navigation
+Single-page scroll experience; optional sticky mini navigation
+CTA
+Instagram follow button must be obvious and clickable
+Readability
+High contrast and comfortable font size on mobile
+Speed
+Optimize images and animations for quick loading
+Accessibility
+Alt text for product images; readable contrast
+Branding
+Use Kalapriti logo/name consistently
+Editing
+Build the page so product images/text can be updated later
+1. ASSETS TO BE PROVIDED / REQUESTED FROM KALAPRITI
+Kalapriti logo in PNG/SVG format
+Brand/product photographs
+Founder photograph, if desired
+Instagram profile link
+Phone/WhatsApp number
+Email address, if desired
+Final product names/categories
+Any existing brand fonts or brand guidelines
+QR code destination URL once the landing page is ready
+1. FINAL PAGE STRUCTURE — ONE-GLANCE WIREFRAME
+01 — HERO: Cute yarn/crochet characters + door → “WELCOME TO KALAPRITI”
+02 — VISION & MISSION
+03 — OUR STORY / HOW KALAPRITI BEGAN
+04 — PRODUCT HIGHLIGHTS
+05 — FOLLOW US ON INSTAGRAM
+06 — FOUNDER + CONTACT DETAILS
+07 — FINAL THANK-YOU / CUSTOM ORDER CTA
+1. DESIGNER'S CREATIVE FREEDOM
+The structure and copy define the required user journey. The designer may creatively interpret illustrations, character poses, transitions, typography pairing, product layout and micro-interactions while keeping the overall Kalapriti personality warm, handmade, premium and playful.
+Most important feeling
+When someone scans the QR code, they should think: “Wow, this brand is cute, creative and different.” The page should make the visitor feel like they have entered Kalapriti’s little handmade world.
+1. FINAL HANDOFF CHECKLIST
+☐ Mobile responsive landing page
+☐ Opening door animation completed
+☐ Cute yarn/crochet characters implemented
+☐ Vision & Mission section added
+☐ Brand story added
+☐ Product highlights added
+☐ Instagram icon + clickable follow CTA added
+☐ Founder/contact section added
+☐ QR code tested on multiple phones
+☐ Instagram link tested
+☐ All product images optimized
+☐ Page loading speed checked
+☐ Final proofread completed
+☐ Landing page URL ready for exhibition QR printing
+KALAPRITI  •  LOOPS OF LOVE, FROM HANDS TO HEART
