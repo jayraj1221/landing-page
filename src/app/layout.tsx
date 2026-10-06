@@ -32,18 +32,20 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: 'KALAPRITI (कलाप्रिति) | Loops of Love — Crochet MBA Presentation & Artisan House',
+  title: 'KALAPRITI (कलाप्रिति) | Loops of Love — Handcrafted Crochet & Custom Creations',
   description:
-    'A high-end editorial showcase and MBA business presentation for Kalapriti, founded by Tisha Vaghasiya. Elevating handmade crochet into a scalable DTC artisan enterprise.',
+    'A warm, interactive handmade world by Kalapriti, founded by Tisha Vaghasiya. Loops of love, from hands to heart. Thoughtfully handcrafted crochet dolls, spiritual idols, everlasting bouquets, and personalized gifting.',
   keywords: [
-    'Crochet MBA Presentation',
     'Kalapriti',
+    'कलाप्रिति',
     'Tisha Vaghasiya',
-    'Artisanal Crochet',
+    'Loops of Love',
+    'Handcrafted Crochet',
+    'Custom Crochet Dolls',
     'Amigurumi Idols',
-    'Custom Portrait Dolls',
-    'Handmade Keepsakes',
-    'Slow Fashion',
+    'Crochet Flowers',
+    'Personalized Gifting',
+    'Baby Crochet',
   ],
   icons: {
     icon: '/assets/logo.jpg',

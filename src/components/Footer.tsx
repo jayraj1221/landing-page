@@ -12,37 +12,38 @@ export default function Footer() {
   return (
     <footer className="relative bg-parchment-50 border-t border-parchment-300 pt-20 pb-12 overflow-hidden text-espresso-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Calm Final Editorial Statement */}
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span className="text-xs uppercase tracking-[0.3em] font-semibold text-terracotta block">
-            Endless Horizons
+        
+        {/* Final Editorial Statement */}
+        <div className="text-center max-w-3xl mx-auto mb-14 space-y-3">
+          <span className="text-xs uppercase tracking-[0.25em] font-semibold text-terracotta block">
+            Handmade with Love
           </span>
-          <h2 className="font-editorial-heading text-4xl sm:text-6xl font-light text-espresso-900 leading-tight">
-            FROM A SIMPLE THREAD TO A BUSINESS OF
+          <h2 className="font-editorial-heading text-3xl sm:text-5xl font-light text-espresso-900 leading-tight">
+            FROM OUR HANDS TO YOUR HEART,
             <br />
-            <span className="italic text-terracotta">ENDLESS POSSIBILITIES.</span>
+            <span className="italic text-terracotta-dark">ONE LOOP AT A TIME.</span>
           </h2>
-          <p className="font-handwritten text-2xl text-terracotta-dark pt-2">
+          <p className="font-handwritten text-2xl sm:text-3xl text-terracotta pt-1">
             कलाप्रिति • Loops of love, from hands to heart
           </p>
         </div>
 
-        {/* Brand Centerpiece */}
-        <div className="flex flex-col items-center justify-center space-y-4 mb-16">
-          <div className="relative h-20 w-20 rounded-full overflow-hidden border border-parchment-300 shadow-sm">
+        {/* Brand Centerpiece - Prominent & Beautiful */}
+        <div className="flex flex-col items-center justify-center space-y-4 mb-14">
+          <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-3xl overflow-hidden border-2 border-terracotta/30 shadow-tactile ring-4 ring-terracotta/10 bg-white group hover:scale-105 transition-transform duration-300">
             <Image
               src="/assets/logo.jpg"
-              alt="Kalapriti Logo"
+              alt="Kalapriti Brand Emblem"
               fill
               className="object-cover"
             />
           </div>
           <div className="text-center">
-            <span className="font-editorial-heading text-2xl font-bold tracking-tight text-espresso-900 block">
+            <span className="font-editorial-heading text-2xl sm:text-3xl font-bold tracking-tight text-espresso-900 block">
               KALAPRITI
             </span>
-            <span className="text-xs uppercase tracking-widest text-espresso-600">
-              Handcrafted Artisanal Enterprise & MBA Presentation
+            <span className="text-xs uppercase tracking-widest text-espresso-600 font-medium">
+              Handcrafted Crochet • Personalized Gifting • Custom Creations
             </span>
           </div>
         </div>
@@ -50,29 +51,30 @@ export default function Footer() {
         {/* Minimal Nav Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-10 border-t border-b border-parchment-200 text-xs">
           <div>
-            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">Narrative</h4>
+            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">About Kalapriti</h4>
             <ul className="space-y-2 text-espresso-600">
-              <li><a href="#story" className="hover:text-terracotta transition-colors">Our Story</a></li>
-              <li><a href="#craft" className="hover:text-terracotta transition-colors">What is Crochet</a></li>
-              <li><a href="#evolution" className="hover:text-terracotta transition-colors">Evolution Timeline</a></li>
+              <li><a href="#welcome" className="hover:text-terracotta transition-colors">The Magic Door</a></li>
+              <li><a href="#vision" className="hover:text-terracotta transition-colors">Vision & Mission</a></li>
+              <li><a href="#story" className="hover:text-terracotta transition-colors">Our Brand Story</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">Collections</h4>
+            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">Creations</h4>
             <ul className="space-y-2 text-espresso-600">
-              <li><a href="#collections" className="hover:text-terracotta transition-colors">Curated Archive</a></li>
-              <li><a href="#lines" className="hover:text-terracotta transition-colors">Product Spectrum</a></li>
-              <li><a href="#process" className="hover:text-terracotta transition-colors">Craft Methodology</a></li>
+              <li><a href="#creations" className="hover:text-terracotta transition-colors">Crochet Dolls</a></li>
+              <li><a href="#creations" className="hover:text-terracotta transition-colors">Spiritual Idols</a></li>
+              <li><a href="#creations" className="hover:text-terracotta transition-colors">Flowers & Bouquets</a></li>
+              <li><a href="#creations" className="hover:text-terracotta transition-colors">Baby Collection</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">MBA Business</h4>
+            <h4 className="font-semibold uppercase tracking-wider text-espresso-900 mb-3">The Craft</h4>
             <ul className="space-y-2 text-espresso-600">
-              <li><a href="#mba-strategy" className="hover:text-terracotta transition-colors">Market & Economics</a></li>
-              <li><a href="#business-model" className="hover:text-terracotta transition-colors">Value Chain Model</a></li>
-              <li><a href="#sustainability" className="hover:text-terracotta transition-colors">Conscious ESG</a></li>
+              <li><a href="#craft" className="hover:text-terracotta transition-colors">Machine-Defying Geometry</a></li>
+              <li><a href="#craft" className="hover:text-terracotta transition-colors">100% Hand-Hooked</a></li>
+              <li><a href="#sustainability" className="hover:text-terracotta transition-colors">Natural Organic Fibers</a></li>
             </ul>
           </div>
 
@@ -81,7 +83,7 @@ export default function Footer() {
             <ul className="space-y-2 text-espresso-600">
               <li>
                 <a
-                  href="https://instagram.com/kalapriti_"
+                  href="https://www.instagram.com/kalapriti_/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-terracotta transition-colors"
@@ -90,7 +92,7 @@ export default function Footer() {
                   <span>@kalapriti_</span>
                 </a>
               </li>
-              <li><span>Founder: Tisha Vaghasiya</span></li>
+              <li><a href="#founder" className="hover:text-terracotta transition-colors">Founder: Tisha Vaghasiya</a></li>
               <li><span>Exhibition Stall Activation</span></li>
             </ul>
           </div>
@@ -101,7 +103,7 @@ export default function Footer() {
           <p>© {new Date().getFullYear()} Kalapriti. Handcrafted with reverence in India.</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              Curated for MBA Capstone by <strong className="text-espresso-800">Tisha Vaghasiya</strong>
+              Handcrafted with love by <strong className="text-espresso-800">Tisha Vaghasiya</strong> ♡
             </span>
             <button
               onClick={scrollToTop}
