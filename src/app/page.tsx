@@ -3,16 +3,13 @@
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import VisionMission from '@/components/VisionMission';
 import StoryIntro from '@/components/StoryIntro';
-import WhatIsCrochet from '@/components/WhatIsCrochet';
-import EvolutionTimeline from '@/components/EvolutionTimeline';
-import ArtGallery from '@/components/ArtGallery';
-import ProcessFlow from '@/components/ProcessFlow';
-import MbaBusinessSection from '@/components/MbaBusinessSection';
-import BusinessModelFlow from '@/components/BusinessModelFlow';
 import ProductCategories from '@/components/ProductCategories';
+import WhatIsCrochet from '@/components/WhatIsCrochet';
+import ProcessFlow from '@/components/ProcessFlow';
+import ArtGallery from '@/components/ArtGallery';
 import ModernSustainability from '@/components/ModernSustainability';
-import GrowthOpportunity from '@/components/GrowthOpportunity';
 import InstagramStallConversion from '@/components/InstagramStallConversion';
 import Footer from '@/components/Footer';
 import OrderInquiryModal from '@/components/OrderInquiryModal';
@@ -22,49 +19,40 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-parchment-50 relative selection:bg-terracotta/25 selection:text-espresso-900">
-      {/* Sticky Header with Navigation & Modal Trigger */}
+      {/* 00. Header with Prominent Brand Logo & Clean Navigation */}
       <Navbar onOpenOrderModal={() => setIsOrderModalOpen(true)} />
 
-      {/* Hero Section */}
+      {/* 01. The Welcome / Magic Door Hero (Section 01 of Brief) */}
       <Hero onOpenOrderModal={() => setIsOrderModalOpen(true)} />
 
-      {/* 01. Brand & Narrative Story */}
+      {/* 02. Vision & Mission Cards (Section 02 of Brief) */}
+      <VisionMission />
+
+      {/* 03. The Kalapriti Story & Journey (Section 03 of Brief) */}
       <StoryIntro />
 
-      {/* 02. What is Crochet? Structural Mastery */}
-      <WhatIsCrochet />
-
-      {/* 03. Evolutionary Timeline: Tradition to Global Market */}
-      <EvolutionTimeline />
-
-      {/* 04. Curated Archive / Art of Crochet Gallery */}
-      <ArtGallery onOpenOrderModal={() => setIsOrderModalOpen(true)} />
-
-      {/* 05. The 5-Stage Craft Process */}
-      <ProcessFlow />
-
-      {/* 06. MBA Capstone Strategy, Market Sizing & Unit Economics */}
-      <MbaBusinessSection />
-
-      {/* 07. The Value Chain & Business Model Flow */}
-      <BusinessModelFlow />
-
-      {/* 08. Curated Product Spectrum */}
+      {/* 04. Product Highlights: "A Little of What We Create" (Section 04 of Brief) */}
       <ProductCategories onOpenOrderModal={() => setIsOrderModalOpen(true)} />
 
-      {/* 09. Modern Craft & Zero-Waste Sustainability */}
+      {/* 05. The Craft: Machine-Defying Geometry & 100% Hand-Hooked (Needful context) */}
+      <WhatIsCrochet />
+
+      {/* 06. The 5-Stage Craft Methodology: Unspun Thread to Heirloom */}
+      <ProcessFlow />
+
+      {/* 07. Curated Archive Gallery: Close-Up Inspection of Handmade Pieces */}
+      <ArtGallery onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+
+      {/* 08. Conscious Craft & Zero-Waste Sustainability */}
       <ModernSustainability />
 
-      {/* 10. Future Horizons & Expansion Engine */}
-      <GrowthOpportunity />
-
-      {/* 11. Exhibition Stall QR & Instagram Conversion Experience */}
+      {/* 09. Instagram Follow + Founder Details + Final CTA (Sections 05, 06, 07 of Brief) */}
       <InstagramStallConversion onOpenOrderModal={() => setIsOrderModalOpen(true)} />
 
-      {/* Calm Luxury Editorial Footer */}
+      {/* 10. Calm Luxury Editorial Footer */}
       <Footer />
 
-      {/* Commission & Stall Visitor Inquiry Modal */}
+      {/* 11. Bespoke Commission & Stall Visitor Inquiry Modal */}
       <OrderInquiryModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
