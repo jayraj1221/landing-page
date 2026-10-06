@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FDFBF7;
+  --foreground: #261B16;
+  --accent-terracotta: #D97752;
+  --accent-sage: #8B9E6E;
+  --accent-coral: #F07073;
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+  scroll-behavior: auto; /* Handled smoothly by Lenis */
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow-x: hidden;
+  font-family: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Selection */
+::selection {
+  background-color: #EBA384;
+  color: #1E140F;
+}
+
+/* Tactile Linen / Paper grain subtle overlay */
+.bg-tactile-pattern {
+  background-color: #FDFBF7;
+  background-image: radial-gradient(rgba(217, 119, 82, 0.05) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Luxury Editorial Typography utilities */
+.font-editorial-heading {
+  font-family: var(--font-cormorant), Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.font-editorial-subheading {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.font-handwritten {
+  font-family: var(--font-caveat), cursive;
+}
+
+/* Smooth custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5EBE0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DFCAAF;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D97752;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
