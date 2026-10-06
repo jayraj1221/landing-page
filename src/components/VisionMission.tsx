@@ -68,7 +68,7 @@ export default function VisionMission() {
                 Handmade Art in Everyday Life
               </h3>
               <p className="text-base sm:text-lg text-espresso-800 font-light leading-relaxed">
-                To make handmade art a part of everyday life by creating meaningful, beautiful, and personalized products that connect people through creativity, craftsmanship, and emotion.
+                To weave handmade art into everyday life through meaningful, personalized creations that connect hearts with creativity and craft.
               </p>
             </div>
 
@@ -102,7 +102,7 @@ export default function VisionMission() {
                 Thoughtful Craft & Artisan Love
               </h3>
               <p className="text-base sm:text-lg text-espresso-800 font-light leading-relaxed">
-                To create thoughtfully handcrafted crochet and personalized gifting products with love, creativity, and attention to detail, while celebrating the value of handmade work and creating opportunities for skilled artisans and women.
+                To handcraft heartfelt crochet gifts with meticulous love, celebrating authentic artistry and empowering women artisans.
               </p>
             </div>
 

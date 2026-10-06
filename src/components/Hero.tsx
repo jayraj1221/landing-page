@@ -289,15 +289,6 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
                 </div>
               </motion.div>
 
-              {/* Toggle Hint */}
-              <div className="w-full pt-2 z-10">
-                <button
-                  onClick={() => setDoorOpen(!doorOpen)}
-                  className="px-4 py-1.5 rounded-full bg-white/90 hover:bg-white text-espresso-800 text-[11px] font-semibold tracking-wider uppercase border border-parchment-300 shadow-sm transition-all"
-                >
-                  {doorOpen ? 'Close the Magic Door' : 'Open the Magic Door ✦'}
-                </button>
-              </div>
             </motion.div>
           </div>
         </div>
