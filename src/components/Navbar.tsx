@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight, Sparkles, Instagram } from 'lucide-react';
 
@@ -17,7 +18,7 @@ export default function Navbar({ onOpenOrderModal }: NavbarProps) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -70,10 +71,10 @@ export default function Navbar({ onOpenOrderModal }: NavbarProps) {
       </AnimatePresence>
 
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 transform-gpu ${
           scrolled || mobileMenuOpen
-            ? 'bg-parchment-50 shadow-tactile border-b border-parchment-300/80 py-2.5'
-            : 'bg-parchment-50/95 sm:bg-transparent py-3 sm:py-5 border-b border-parchment-200/60 sm:border-transparent'
+            ? 'bg-parchment-50 shadow-tactile border-b border-parchment-300/80 py-2.5 sm:py-2.5'
+            : 'bg-parchment-50/95 sm:bg-transparent py-2.5 sm:py-5 border-b border-parchment-200/60 sm:border-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,11 +82,12 @@ export default function Navbar({ onOpenOrderModal }: NavbarProps) {
             {/* Brand Logo & Name */}
             <a href="#" className="flex items-center gap-3 sm:gap-3.5 group">
               <div className="relative h-11 w-11 sm:h-14 sm:w-14 rounded-full overflow-hidden border-2 border-terracotta/30 shadow-md ring-2 ring-terracotta/10 group-hover:scale-105 transition-all duration-300 bg-white flex-shrink-0">
-                <Image
+                <SmoothImage
                   src="/assets/logo.jpg"
                   alt="Kalapriti Logo"
                   fill
                   className="object-cover"
+                  sizes="56px"
                   priority
                 />
               </div>

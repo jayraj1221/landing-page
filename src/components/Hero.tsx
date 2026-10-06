@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown, Sparkles, Instagram, Heart, DoorOpen, Compass } from 'lucide-react';
 import InteractiveThreadCanvas from './InteractiveThreadCanvas';
@@ -16,7 +17,7 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
   return (
     <section
       id="welcome"
-      className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden pt-24 sm:pt-28 pb-10 px-4 sm:px-6 lg:px-8 bg-tactile-pattern"
+      className="relative min-h-[100svh] min-h-screen w-full flex flex-col justify-between overflow-hidden pt-24 sm:pt-28 pb-10 px-4 sm:px-6 lg:px-8 bg-tactile-pattern transform-gpu"
     >
       {/* Background Thread Waves Animation */}
       <InteractiveThreadCanvas opacity={0.3} />
@@ -72,11 +73,12 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
               className="flex items-center gap-4 sm:gap-6"
             >
               <div className="relative h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 rounded-3xl overflow-hidden border-2 border-terracotta/30 shadow-tactile ring-4 ring-terracotta/10 bg-white flex-shrink-0 group hover:scale-105 transition-transform duration-300">
-                <Image
+                <SmoothImage
                   src="/assets/logo.jpg"
                   alt="Kalapriti Handcrafted Brand Logo"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 112px, 128px"
                   priority
                 />
               </div>
@@ -203,11 +205,12 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
                 {/* Background Interior Glow (Visible when door opens) */}
                 <div className="absolute inset-x-4 inset-y-2 rounded-t-full bg-gradient-to-b from-amber-100 via-peach/40 to-terracotta/30 shadow-inner flex flex-col items-center justify-center p-4 overflow-hidden border-2 border-dashed border-terracotta/30">
                   <div className="relative w-36 h-36 rounded-2xl overflow-hidden shadow-md mb-2">
-                    <Image
+                    <SmoothImage
                       src="/assets/spiritual-jagannath.jpg"
                       alt="Kalapriti Amigurumi Creations"
                       fill
                       className="object-cover"
+                      sizes="144px"
                     />
                   </div>
                   <span className="font-editorial-heading text-sm font-semibold text-espresso-900 leading-tight">

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Eye, X, Heart, ExternalLink } from 'lucide-react';
 
@@ -178,26 +179,27 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
           {galleryItems.map((item, index) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, delay: (index % 3) * 0.15 }}
+              viewport={{ once: true, margin: '0px 0px 80px 0px' }}
+              transition={{ duration: 0.6, delay: (index % 2) * 0.08 }}
               onClick={() => setSelectedItem(item)}
-              className={`${item.colSpan} group cursor-pointer relative rounded-3xl overflow-hidden bg-parchment-200 border-2 border-white shadow-tactile transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5`}
+              className={`${item.colSpan} group cursor-pointer relative rounded-3xl overflow-hidden bg-parchment-200 border-2 border-white shadow-tactile transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5 transform-gpu`}
             >
               <div className={`relative w-full ${item.aspect} overflow-hidden`}>
-                <Image
+                <SmoothImage
                   src={item.image}
                   alt={item.title}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
 
                 {/* Gradient Vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-espresso-900/80 via-espresso-900/10 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-gradient-to-t from-espresso-900/80 via-espresso-900/10 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-300 pointer-events-none" />
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 p-6 flex flex-col justify-between text-white">
+                <div className="absolute inset-0 p-6 flex flex-col justify-between text-white pointer-events-none">
                   <div className="flex items-center justify-between">
                     <span className="px-3 py-1 rounded-full text-[10px] uppercase tracking-wider font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
                       {item.category}
@@ -249,11 +251,12 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
               </button>
 
               <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200">
-                <Image
+                <SmoothImage
                   src={selectedItem.image}
                   alt={selectedItem.title}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
 

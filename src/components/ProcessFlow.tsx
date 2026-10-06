@@ -107,12 +107,12 @@ export default function ProcessFlow() {
               return (
                 <motion.div
                   key={step.num}
-                  initial={{ opacity: 0, y: 25 }}
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: idx * 0.12 }}
+                  viewport={{ once: true, margin: '0px 0px 60px 0px' }}
+                  transition={{ duration: 0.5, delay: (idx % 3) * 0.08 }}
                   onClick={() => setActiveStep(idx)}
-                  className={`cursor-pointer rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between border ${
+                  className={`cursor-pointer rounded-3xl p-6 transition-all duration-300 flex flex-col justify-between border transform-gpu ${
                     isSelected
                       ? 'bg-parchment-100 border-terracotta shadow-soft-lift scale-[1.02]'
                       : 'bg-white/80 hover:bg-parchment-100 border-parchment-300 hover:border-parchment-400'

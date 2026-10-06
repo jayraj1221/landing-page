@@ -47,11 +47,11 @@ export default function VisionMission() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch max-w-5xl mx-auto">
           {/* Card 1: Vision */}
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: '0px 0px 60px 0px' }}
             transition={{ duration: 0.7 }}
-            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group"
+            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
           >
             {/* Top decorative badge */}
             <div className="flex items-center justify-between mb-6">
@@ -81,11 +81,11 @@ export default function VisionMission() {
 
           {/* Card 2: Mission */}
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-sage/50 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group"
+            viewport={{ once: true, margin: '0px 0px 60px 0px' }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-sage/50 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
           >
             {/* Top decorative badge */}
             <div className="flex items-center justify-between mb-6">

@@ -33,8 +33,15 @@ export default function InteractiveThreadCanvas({
 
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
-      width = canvas.width = canvas.parentElement.clientWidth;
-      height = canvas.height = canvas.parentElement.clientHeight;
+      const newWidth = canvas.parentElement.clientWidth;
+      const newHeight = canvas.parentElement.clientHeight;
+      // On mobile browsers, scrolling down collapses the URL bar, firing a resize event with ~50-60px height change.
+      // Re-assigning canvas.width/height clears the entire canvas buffer, causing a harsh screen flicker.
+      // Only resize if width changed (screen rotation) or height changed drastically (> 120px).
+      if (Math.abs(newWidth - width) > 4 || Math.abs(newHeight - height) > 120) {
+        width = canvas.width = newWidth;
+        height = canvas.height = newHeight;
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -43,8 +50,8 @@ export default function InteractiveThreadCanvas({
       targetMouseY = e.clientY - rect.top;
     };
 
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
     // Yarn strands simulation
     const strands = [
@@ -110,7 +117,8 @@ export default function InteractiveThreadCanvas({
   return (
     <canvas
       ref={canvasRef}
-      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
+      className={`pointer-events-none absolute inset-0 h-full w-full transform-gpu ${className}`}
+      style={{ transform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden', backfaceVisibility: 'hidden' }}
       aria-hidden="true"
     />
   );

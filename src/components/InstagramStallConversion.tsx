@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Instagram, Sparkles, Heart, ArrowUpRight, CheckCircle2, MessageCircle, Send } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -103,12 +104,13 @@ export default function InstagramStallConversion({ onOpenOrderModal }: Instagram
               >
                 <div className="grid grid-cols-2 gap-3 mb-3">
                   {instagramPhotos.map((photo, i) => (
-                    <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-espresso-950/40">
-                      <Image
+                    <div key={i} className="relative aspect-square rounded-2xl overflow-hidden bg-espresso-950/40 transform-gpu">
+                      <SmoothImage
                         src={photo.src}
                         alt={photo.alt}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 45vw, 200px"
                       />
                     </div>
                   ))}
@@ -135,11 +137,12 @@ export default function InstagramStallConversion({ onOpenOrderModal }: Instagram
             <div className="lg:col-span-5 flex flex-col items-center sm:items-start text-center sm:text-left space-y-5">
               {/* Large Prominent Logo presentation */}
               <div className="relative h-28 w-28 sm:h-36 sm:w-36 rounded-3xl overflow-hidden border-2 border-terracotta/30 shadow-tactile ring-4 ring-terracotta/10 bg-white">
-                <Image
+                <SmoothImage
                   src="/assets/logo.jpg"
                   alt="Kalapriti Official Brand Logo"
                   fill
                   className="object-cover"
+                  sizes="(max-width: 640px) 112px, 144px"
                 />
               </div>
 

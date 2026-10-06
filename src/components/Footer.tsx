@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { ArrowUp, Instagram, Heart, Sparkles } from 'lucide-react';
 
 export default function Footer() {
@@ -31,11 +32,12 @@ export default function Footer() {
         {/* Brand Centerpiece - Prominent & Beautiful */}
         <div className="flex flex-col items-center justify-center space-y-4 mb-14">
           <div className="relative h-24 w-24 sm:h-28 sm:w-28 rounded-3xl overflow-hidden border-2 border-terracotta/30 shadow-tactile ring-4 ring-terracotta/10 bg-white group hover:scale-105 transition-transform duration-300">
-            <Image
+            <SmoothImage
               src="/assets/logo.jpg"
               alt="Kalapriti Brand Emblem"
               fill
               className="object-cover"
+              sizes="(max-width: 640px) 96px, 112px"
             />
           </div>
           <div className="text-center">

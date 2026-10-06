@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Cpu, ShieldCheck, Sparkles, Infinity, Fingerprint } from 'lucide-react';
 
@@ -105,15 +106,16 @@ export default function WhatIsCrochet() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: '0px 0px 60px 0px' }}
               transition={{ duration: 0.8 }}
               className="relative h-full min-h-[420px] rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-parchment-200"
             >
-              <Image
+              <SmoothImage
                 src="/assets/fashion-tote-bag.jpg"
                 alt="Haute Couture Hand-Crocheted Designer Tote Bag with intricate geometric granny square motifs"
                 fill
                 className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-espresso-900/85 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
                 <span className="text-xs uppercase tracking-widest text-terracotta-light font-medium">

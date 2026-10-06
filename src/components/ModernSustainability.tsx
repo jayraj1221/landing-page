@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Leaf, RefreshCw, Feather, ShieldCheck, HeartHandshake } from 'lucide-react';
 
@@ -87,12 +88,13 @@ export default function ModernSustainability() {
 
           {/* Right Image Composition: Baby Romper & Natural Wood elements */}
           <div className="lg:col-span-5 relative">
-            <div className="relative aspect-[4/5] rounded-[36px] overflow-hidden shadow-2xl border-4 border-white bg-parchment-200">
-              <Image
+            <div className="relative aspect-[4/5] rounded-[36px] overflow-hidden shadow-2xl border-4 border-white bg-parchment-200 transform-gpu">
+              <SmoothImage
                 src="/assets/baby-romper-2.jpg"
                 alt="Kalapriti 100% Organic Cotton Baby Romper with wooden buttons"
                 fill
                 className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-espresso-900/80 via-transparent to-transparent flex flex-col justify-end p-8 text-white">
                 <span className="text-xs uppercase tracking-widest text-sage-light font-medium">

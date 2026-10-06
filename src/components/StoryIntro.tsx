@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, Quote, ArrowRight } from 'lucide-react';
 
@@ -110,15 +111,16 @@ export default function StoryIntro() {
             <motion.div
               initial={{ opacity: 0, scale: 0.96 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9 }}
+              viewport={{ once: true, margin: '0px 0px 60px 0px' }}
+              transition={{ duration: 0.8 }}
               className="relative aspect-[4/5] rounded-[36px] overflow-hidden shadow-2xl border-4 border-white bg-parchment-200"
             >
-              <Image
+              <SmoothImage
                 src="/assets/custom-grandparents.jpg"
                 alt="Kalapriti Handcrafted Custom Keepsake - Three Generations"
                 fill
                 className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 42vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-espresso-900/80 via-transparent to-transparent flex flex-col justify-end p-6 sm:p-8 text-white">
                 <span className="text-xs uppercase tracking-widest text-terracotta-light font-semibold">
@@ -137,15 +139,16 @@ export default function StoryIntro() {
             <motion.div
               initial={{ opacity: 0, x: 20, y: 20 }}
               whileInView={{ opacity: 1, x: 0, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, delay: 0.2 }}
+              viewport={{ once: true, margin: '0px 0px 60px 0px' }}
+              transition={{ duration: 0.8, delay: 0.15 }}
               className="hidden sm:block absolute -bottom-8 -left-8 w-44 sm:w-52 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-4 border-white bg-parchment-200"
             >
-              <Image
+              <SmoothImage
                 src="/assets/bouquet-sunflower.jpg"
                 alt="Handcrafted Sunflower Bouquet"
                 fill
                 className="object-cover"
+                sizes="208px"
               />
               <div className="absolute bottom-0 inset-x-0 bg-espresso-900/80 p-2 text-center">
                 <p className="text-[10px] text-white font-medium uppercase tracking-wider">

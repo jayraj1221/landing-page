@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Check, ArrowRight, Eye } from 'lucide-react';
 
@@ -185,20 +186,21 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
           {filtered.map((item, idx) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (idx % 4) * 0.1 }}
+              viewport={{ once: true, margin: '0px 0px 60px 0px' }}
+              transition={{ duration: 0.5, delay: (idx % 2) * 0.08 }}
               onClick={() => setActiveProduct(item)}
               className="group cursor-pointer rounded-3xl bg-parchment-50 border border-parchment-300 overflow-hidden shadow-soft-lift hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
             >
               {/* Product Image */}
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-parchment-200">
-                <Image
+                <SmoothImage
                   src={item.image}
                   alt={item.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
                 <div className="absolute top-2.5 left-2.5">
                   <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-espresso-900/80 backdrop-blur-md text-white">
@@ -256,11 +258,12 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
               className="relative w-full max-w-2xl rounded-[32px] bg-parchment-50 overflow-hidden shadow-2xl border border-parchment-300 grid grid-cols-1 md:grid-cols-2 text-espresso-900"
             >
               <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200">
-                <Image
+                <SmoothImage
                   src={activeProduct.image}
                   alt={activeProduct.name}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
 
