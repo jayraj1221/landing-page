@@ -16,14 +16,22 @@ import OrderInquiryModal from '@/components/OrderInquiryModal';
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [modalInitialCategory, setModalInitialCategory] = useState<string | undefined>(undefined);
+  const [modalInitialDetails, setModalInitialDetails] = useState<string | undefined>(undefined);
+
+  const handleOpenOrderModal = (category?: string, details?: string) => {
+    setModalInitialCategory(category);
+    setModalInitialDetails(details);
+    setIsOrderModalOpen(true);
+  };
 
   return (
     <main className="min-h-screen bg-parchment-50 relative selection:bg-terracotta/25 selection:text-espresso-900">
       {/* 00. Header with Prominent Brand Logo & Clean Navigation */}
-      <Navbar onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+      <Navbar onOpenOrderModal={() => handleOpenOrderModal()} />
 
       {/* 01. The Welcome / Magic Door Hero (Section 01 of Brief) */}
-      <Hero onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+      <Hero onOpenOrderModal={() => handleOpenOrderModal()} />
 
       {/* 02. Vision & Mission Cards (Section 02 of Brief) */}
       <VisionMission />
@@ -32,7 +40,7 @@ export default function Home() {
       <StoryIntro />
 
       {/* 04. Product Highlights: "A Little of What We Create" (Section 04 of Brief) */}
-      <ProductCategories onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+      <ProductCategories onOpenOrderModal={(cat, det) => handleOpenOrderModal(cat, det)} />
 
       {/* 05. The Craft: Machine-Defying Geometry & 100% Hand-Hooked (Needful context) */}
       <WhatIsCrochet />
@@ -41,13 +49,13 @@ export default function Home() {
       <ProcessFlow />
 
       {/* 07. Curated Archive Gallery: Close-Up Inspection of Handmade Pieces */}
-      <ArtGallery onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+      <ArtGallery onOpenOrderModal={(cat, det) => handleOpenOrderModal(cat, det)} />
 
       {/* 08. Conscious Craft & Zero-Waste Sustainability */}
       <ModernSustainability />
 
       {/* 09. Instagram Follow + Founder Details + Final CTA (Sections 05, 06, 07 of Brief) */}
-      <InstagramStallConversion onOpenOrderModal={() => setIsOrderModalOpen(true)} />
+      <InstagramStallConversion onOpenOrderModal={() => handleOpenOrderModal()} />
 
       {/* 10. Calm Luxury Editorial Footer */}
       <Footer />
@@ -56,6 +64,8 @@ export default function Home() {
       <OrderInquiryModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
+        initialCategory={modalInitialCategory}
+        initialDetails={modalInitialDetails}
       />
     </main>
   );
