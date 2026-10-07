@@ -2,7 +2,18 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Heart, Instagram, Sparkles, CheckCircle2, Copy, Check, ArrowUpRight, MessageCircle } from 'lucide-react';
+import {
+  X,
+  Instagram,
+  Sparkles,
+  CheckCircle2,
+  Copy,
+  Check,
+  ArrowUpRight,
+  MessageCircle,
+  Share2,
+  ExternalLink,
+} from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 interface OrderInquiryModalProps {
@@ -23,9 +34,9 @@ export default function OrderInquiryModal({
   const [phone, setPhone] = useState('');
   const [details, setDetails] = useState(initialDetails);
   const [submitted, setSubmitted] = useState(false);
+  const [channelUsed, setChannelUsed] = useState<'instagram' | 'whatsapp'>('instagram');
   const [copied, setCopied] = useState(false);
   const [generatedMessage, setGeneratedMessage] = useState('');
-  const [instagramUrl, setInstagramUrl] = useState('');
 
   // Sync initial values when modal opens
   useEffect(() => {
@@ -48,36 +59,43 @@ export default function OrderInquiryModal({
 
   const copyToClipboard = (text: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 3000);
-      }).catch(() => {});
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 3000);
+        })
+        .catch(() => {
+          fallbackCopyText(text);
+        });
+    } else {
+      fallbackCopyText(text);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const orderText = composeOrderMessage();
-    setGeneratedMessage(orderText);
-
-    // Official Instagram Direct Link with pre-filled message parameter
-    const encodedText = encodeURIComponent(orderText);
-    const igDmUrl = `https://ig.me/m/kalapriti_?text=${encodedText}`;
-    setInstagramUrl(igDmUrl);
-
-    // Copy to clipboard automatically for guaranteed paste in Instagram app
-    copyToClipboard(orderText);
-
-    // Automatically trigger Instagram DM redirection
+  const fallbackCopyText = (text: string) => {
     try {
-      window.open(igDmUrl, '_blank', 'noopener,noreferrer');
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.top = '0';
+      textArea.style.left = '0';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (success) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      }
     } catch {
-      // Handled by UI button if popup blocker intercepts
+      // Ignore fallback error
     }
+  };
 
-    setSubmitted(true);
-
+  const triggerConfetti = () => {
     try {
       confetti({
         particleCount: 75,
@@ -90,18 +108,78 @@ export default function OrderInquiryModal({
     }
   };
 
+  const handleInstagramSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!name.trim() || !phone.trim()) {
+      alert('Please provide your name and contact phone number.');
+      return;
+    }
+
+    const orderText = composeOrderMessage();
+    setGeneratedMessage(orderText);
+    setChannelUsed('instagram');
+
+    // Automatically copy formatted message to clipboard
+    copyToClipboard(orderText);
+    setSubmitted(true);
+    triggerConfetti();
+  };
+
+  const handleWhatsAppSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!name.trim() || !phone.trim()) {
+      alert('Please provide your name and contact phone number.');
+      return;
+    }
+
+    const orderText = composeOrderMessage();
+    setGeneratedMessage(orderText);
+    setChannelUsed('whatsapp');
+
+    copyToClipboard(orderText);
+
+    // Direct WhatsApp pre-fill URL
+    const encodedText = encodeURIComponent(orderText);
+    const waUrl = `https://api.whatsapp.com/send?text=${encodedText}`;
+
+    try {
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    } catch {
+      // Fallback
+    }
+
+    setSubmitted(true);
+    triggerConfetti();
+  };
+
+  const handleNativeShare = async () => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Kalapriti Custom Order Inquiry',
+          text: generatedMessage,
+        });
+      } catch {
+        // Share dismissed
+      }
+    } else {
+      copyToClipboard(generatedMessage);
+    }
+  };
+
   const resetAndClose = () => {
     setSubmitted(false);
     setCopied(false);
     onClose();
   };
 
-  const whatsAppFallbackUrl = `https://wa.me/?text=${encodeURIComponent(generatedMessage)}`;
+  const igDmUrl = 'https://ig.me/m/kalapriti_';
+  const whatsAppUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(generatedMessage)}`;
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -117,7 +195,7 @@ export default function OrderInquiryModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="relative w-full max-w-lg rounded-3xl bg-parchment-50 p-6 sm:p-8 shadow-2xl border border-parchment-300 text-espresso-900 overflow-hidden my-auto"
+            className="relative w-full max-w-lg rounded-3xl bg-parchment-50 p-5 sm:p-8 shadow-2xl border border-parchment-300 text-espresso-900 overflow-hidden my-auto max-h-[92vh] flex flex-col justify-between"
           >
             {/* Organic top accent */}
             <div className="absolute -top-12 -right-12 h-36 w-36 rounded-full bg-terracotta/15 blur-2xl pointer-events-none" />
@@ -127,26 +205,26 @@ export default function OrderInquiryModal({
             <button
               onClick={resetAndClose}
               aria-label="Close dialog"
-              className="absolute top-5 right-5 p-2 rounded-full text-espresso-600 hover:text-espresso-900 hover:bg-parchment-200 transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-full text-espresso-600 hover:text-espresso-900 hover:bg-parchment-200 transition-colors z-10"
             >
               <X className="h-5 w-5" />
             </button>
 
             {!submitted ? (
-              <div>
-                <div className="mb-6">
+              <div className="overflow-y-auto pr-1">
+                <div className="mb-5">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium tracking-wider uppercase bg-terracotta/10 text-terracotta-dark">
                     <Sparkles className="h-3.5 w-3.5" /> Handcrafted Commission
                   </span>
                   <h3 className="mt-2 text-2xl sm:text-3xl font-editorial-heading font-medium text-espresso-900">
-                    Order via Instagram DM
+                    Custom Order Inquiry
                   </h3>
                   <p className="mt-1 text-xs sm:text-sm text-espresso-600">
-                    Fill in your details below. We will format your order and redirect you directly to <span className="font-semibold text-terracotta">@kalapriti_</span> on Instagram DM!
+                    Connect directly with <strong className="text-espresso-800">Kalapriti</strong> on Instagram DM or WhatsApp. Fill your details below to get started.
                   </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form className="space-y-4">
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-espresso-700 mb-1">
                       Choose Collection / Commission Type
@@ -169,7 +247,7 @@ export default function OrderInquiryModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-espresso-700 mb-1">
-                        Your Name
+                        Your Name *
                       </label>
                       <input
                         type="text"
@@ -182,7 +260,7 @@ export default function OrderInquiryModal({
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-espresso-700 mb-1">
-                        WhatsApp / Contact
+                        WhatsApp / Phone *
                       </label>
                       <input
                         type="tel"
@@ -208,41 +286,70 @@ export default function OrderInquiryModal({
                     />
                   </div>
 
-                  <div className="pt-2">
+                  {/* Dual Action Buttons: Instagram DM or WhatsApp */}
+                  <div className="pt-2 space-y-2.5">
+                    {/* Instagram DM Button */}
                     <button
-                      type="submit"
-                      className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-terracotta via-[#E1306C] to-terracotta-dark px-6 py-3.5 text-sm font-semibold uppercase tracking-wider text-white shadow-md hover:opacity-95 transition-all hover:scale-[1.01]"
+                      type="button"
+                      onClick={handleInstagramSubmit}
+                      className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-terracotta via-[#E1306C] to-terracotta-dark px-5 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-md hover:opacity-95 transition-all hover:scale-[1.01]"
                     >
                       <Instagram className="h-4 w-4" />
-                      <span>Send Order to Instagram DM</span>
+                      <span>Order via Instagram DM</span>
                       <ArrowUpRight className="h-4 w-4" />
                     </button>
-                    <p className="text-[11px] text-center text-espresso-600 mt-2">
-                      ✦ Automatically fills your order details & opens chat with @kalapriti_
+                    <p className="text-[11px] text-center text-espresso-600">
+                      📋 Copies your formatted order to clipboard so you can paste directly into @kalapriti_'s DM
+                    </p>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-2 py-1">
+                      <div className="h-[1px] flex-1 bg-parchment-300" />
+                      <span className="text-[10px] uppercase font-bold text-espresso-500 tracking-wider">or instant 1-tap auto-fill</span>
+                      <div className="h-[1px] flex-1 bg-parchment-300" />
+                    </div>
+
+                    {/* WhatsApp Button */}
+                    <button
+                      type="button"
+                      onClick={handleWhatsAppSubmit}
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-sage/60 bg-sage/15 hover:bg-sage/25 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-sage-dark transition-all"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      <span>Send via WhatsApp (Auto-Fills Directly)</span>
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </button>
+                    <p className="text-[10px] text-center text-espresso-600">
+                      ⚡ Opens WhatsApp with the entire order already pre-filled in your chat box!
                     </p>
                   </div>
                 </form>
               </div>
             ) : (
-              <div className="py-4 sm:py-6 space-y-5">
+              <div className="py-2 space-y-4 overflow-y-auto pr-1">
                 {/* Header confirmation */}
                 <div className="text-center space-y-2">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white shadow-lg">
-                    <Instagram className="h-7 w-7" />
+                  <div className="mx-auto flex h-13 w-13 items-center justify-center rounded-2xl bg-gradient-to-br from-[#833AB4] via-[#FD1D1D] to-[#F77737] text-white shadow-lg p-3">
+                    {channelUsed === 'instagram' ? (
+                      <Instagram className="h-7 w-7" />
+                    ) : (
+                      <CheckCircle2 className="h-7 w-7" />
+                    )}
                   </div>
                   <h3 className="text-2xl sm:text-3xl font-editorial-heading font-medium text-espresso-900 pt-1">
-                    Order Ready for Instagram!
+                    Order Details Ready!
                   </h3>
-                  <p className="text-xs sm:text-sm text-espresso-700 max-w-sm mx-auto">
-                    We've opened Instagram DM and copied your formatted order details to your clipboard.
-                  </p>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage/20 text-sage-dark text-xs font-semibold">
+                    <Check className="h-3.5 w-3.5" />
+                    <span>Copied to your clipboard</span>
+                  </div>
                 </div>
 
                 {/* Formatted Message Preview Card */}
-                <div className="relative rounded-2xl bg-white border border-parchment-300 p-4 shadow-inner text-left">
+                <div className="relative rounded-2xl bg-white border border-parchment-300 p-3.5 shadow-inner text-left">
                   <div className="flex items-center justify-between pb-2 mb-2 border-b border-parchment-200 text-xs">
-                    <span className="font-semibold uppercase tracking-wider text-terracotta-dark">
-                      Pre-filled Order Message
+                    <span className="font-semibold uppercase tracking-wider text-terracotta-dark text-[11px]">
+                      Your Formatted Order:
                     </span>
                     <button
                       onClick={() => copyToClipboard(generatedMessage)}
@@ -256,53 +363,77 @@ export default function OrderInquiryModal({
                       ) : (
                         <>
                           <Copy className="h-3 w-3 text-espresso-600" />
-                          <span>Copy Message</span>
+                          <span>Copy Again</span>
                         </>
                       )}
                     </button>
                   </div>
-                  <pre className="font-sans text-xs text-espresso-800 whitespace-pre-wrap leading-relaxed select-all">
+                  <pre className="font-sans text-xs text-espresso-800 whitespace-pre-wrap leading-relaxed select-all max-h-36 overflow-y-auto">
                     {generatedMessage}
                   </pre>
                 </div>
 
-                {/* Helpful instructions for Instagram */}
-                <div className="p-3 rounded-xl bg-peach/25 border border-terracotta/20 text-xs text-espresso-800 flex items-start gap-2.5">
-                  <span className="text-base flex-shrink-0">💡</span>
-                  <p className="leading-snug">
-                    <strong>Quick Tip:</strong> If the Instagram app opens without inserting the text automatically into your chat, simply <strong>Paste</strong> and send! The text is already on your clipboard.
+                {/* Clear Instruction Card explaining Instagram platform restriction */}
+                <div className="p-3.5 rounded-2xl bg-peach/20 border border-terracotta/25 text-xs text-espresso-800 space-y-1.5">
+                  <div className="flex items-center gap-1.5 font-semibold text-terracotta-dark">
+                    <span>💡</span>
+                    <span>How to send in Instagram DM:</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-espresso-700">
+                    Instagram's privacy policy does not allow websites to automatically type into your DM text box. Because of this, your order has been <strong>automatically copied to your clipboard</strong>.
                   </p>
+                  <div className="pt-1 text-[11px] font-medium text-espresso-900 bg-white/70 p-2 rounded-lg border border-parchment-300">
+                    👉 <strong>Step 1:</strong> Tap &ldquo;Open Instagram DM&rdquo; below<br />
+                    👉 <strong>Step 2:</strong> In the message box, <strong>press &amp; hold (Paste)</strong> and tap Send!
+                  </div>
                 </div>
 
                 {/* Actions */}
                 <div className="space-y-2.5 pt-1">
                   <a
-                    href={instagramUrl}
+                    href={igDmUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] py-3.5 text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:opacity-95 transition-all hover:scale-[1.01]"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#FD1D1D] to-[#F77737] py-3 text-xs font-semibold uppercase tracking-wider text-white shadow-md hover:opacity-95 transition-all hover:scale-[1.01]"
                   >
                     <Instagram className="h-4 w-4" />
-                    <span>Open Instagram DM (@kalapriti_)</span>
+                    <span>Open Instagram DM (@kalapriti_) &amp; Paste</span>
                     <ArrowUpRight className="h-4 w-4" />
                   </a>
 
-                  <div className="flex items-center gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <a
-                      href={whatsAppFallbackUrl}
+                      href={whatsAppUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl border border-sage/40 bg-sage/10 py-2.5 text-xs font-medium text-sage-dark hover:bg-sage/20 transition-colors"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-sage/40 bg-sage/10 py-2.5 text-xs font-medium text-sage-dark hover:bg-sage/20 transition-colors"
                     >
                       <MessageCircle className="h-3.5 w-3.5" />
-                      <span>Send on WhatsApp</span>
+                      <span>Send on WhatsApp (Auto-Filled)</span>
                     </a>
 
                     <button
-                      onClick={resetAndClose}
-                      className="flex-1 py-2.5 rounded-xl border border-parchment-300 bg-white text-espresso-700 text-xs font-medium hover:bg-parchment-100 transition-colors"
+                      onClick={handleNativeShare}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-parchment-300 bg-white py-2.5 text-xs font-medium text-espresso-800 hover:bg-parchment-100 transition-colors"
                     >
-                      Close Window
+                      <Share2 className="h-3.5 w-3.5 text-terracotta" />
+                      <span>Share Message...</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-center pt-1">
+                    <button
+                      onClick={() => setSubmitted(false)}
+                      className="text-xs text-espresso-600 hover:text-terracotta underline transition-colors"
+                    >
+                      ← Edit details
+                    </button>
+                    <span className="mx-2 text-espresso-400">•</span>
+                    <button
+                      onClick={resetAndClose}
+                      className="text-xs text-espresso-600 hover:text-espresso-900 underline transition-colors"
+                    >
+                      Close window
                     </button>
                   </div>
                 </div>
