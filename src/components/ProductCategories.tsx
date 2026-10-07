@@ -17,7 +17,7 @@ interface ProductItem {
 }
 
 interface ProductCategoriesProps {
-  onOpenOrderModal: () => void;
+  onOpenOrderModal: (category?: string, details?: string) => void;
 }
 
 export default function ProductCategories({ onOpenOrderModal }: ProductCategoriesProps) {
@@ -157,7 +157,7 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
             </div>
           </div>
           <button
-            onClick={onOpenOrderModal}
+            onClick={() => onOpenOrderModal()}
             className="px-5 py-2.5 rounded-full bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark shadow-sm transition-all whitespace-nowrap"
           >
             Custom Inquiry
@@ -292,8 +292,10 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
                 <div className="pt-4 border-t border-parchment-200 space-y-3">
                   <button
                     onClick={() => {
+                      const itemCat = activeProduct.category;
+                      const itemName = activeProduct.name;
                       setActiveProduct(null);
-                      onOpenOrderModal();
+                      onOpenOrderModal(itemCat, `Inquiry about: ${itemName}`);
                     }}
                     className="w-full py-3 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm flex items-center justify-center gap-2"
                   >

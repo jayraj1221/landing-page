@@ -190,7 +190,7 @@ export default function InstagramStallConversion({ onOpenOrderModal }: Instagram
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-terracotta text-white font-semibold text-xs uppercase tracking-wider hover:bg-terracotta-dark shadow-md transition-all hover:shadow-glow-terracotta"
                 >
                   <Sparkles className="h-4 w-4" />
-                  <span>Contact us for customized orders</span>
+                  <span>Custom Order Inquiry (Instagram DM)</span>
                 </button>
 
                 <a

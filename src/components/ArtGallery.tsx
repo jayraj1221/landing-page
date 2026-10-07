@@ -19,7 +19,7 @@ interface GalleryItem {
 }
 
 interface ArtGalleryProps {
-  onOpenOrderModal: () => void;
+  onOpenOrderModal: (category?: string, details?: string) => void;
 }
 
 export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
@@ -291,8 +291,10 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
                 <div className="pt-2 flex gap-3">
                   <button
                     onClick={() => {
+                      const itemCat = selectedItem.category;
+                      const itemTitle = selectedItem.title;
                       setSelectedItem(null);
-                      onOpenOrderModal();
+                      onOpenOrderModal(itemCat, `Commission inquiry for: ${itemTitle}`);
                     }}
                     className="flex-1 py-3 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm"
                   >
