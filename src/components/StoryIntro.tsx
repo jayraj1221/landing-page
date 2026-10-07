@@ -5,6 +5,7 @@ import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Heart, Sparkles, Quote, ArrowRight } from 'lucide-react';
+import PolaroidScrapbook from './PolaroidScrapbook';
 
 export default function StoryIntro() {
   const journeySteps = [
@@ -158,6 +159,9 @@ export default function StoryIntro() {
             </motion.div>
           </div>
         </div>
+
+        {/* Founder's Exhibition Scrapbook with 3D Flip Notes */}
+        <PolaroidScrapbook />
       </div>
     </section>
   );

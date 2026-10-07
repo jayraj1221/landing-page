@@ -16,6 +16,9 @@ import OrderInquiryModal from '@/components/OrderInquiryModal';
 import ScrollThreadPath from '@/components/ScrollThreadPath';
 import CustomCrochetCursor from '@/components/CustomCrochetCursor';
 import FloatingStallDock from '@/components/FloatingStallDock';
+import MemoryTransformSlider from '@/components/MemoryTransformSlider';
+import AtelierAtmosphereToggle from '@/components/AtelierAtmosphereToggle';
+import CraftSoundscape from '@/components/CraftSoundscape';
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -51,6 +54,9 @@ export default function Home() {
       {/* 06. The 5-Stage Craft Methodology: Unspun Thread to Heirloom */}
       <ProcessFlow />
 
+      {/* 06B. Interactive Memory-To-Keepsake Before/After Split Slider */}
+      <MemoryTransformSlider onOpenOrderModal={(cat, det) => handleOpenOrderModal(cat, det)} />
+
       {/* 07. Curated Archive Gallery: Close-Up Inspection of Handmade Pieces */}
       <ArtGallery onOpenOrderModal={(cat, det) => handleOpenOrderModal(cat, det)} />
 
@@ -79,6 +85,12 @@ export default function Home() {
 
       {/* 14. Desktop Handcrafted Crochet Hook Cursor */}
       <CustomCrochetCursor />
+
+      {/* 15. Atelier Mood Lighting Controller (Daylight / Golden Hour / Stall Fairy Lights) */}
+      <AtelierAtmosphereToggle />
+
+      {/* 16. Tactile ASMR Wooden Crochet Hook Soundscape */}
+      <CraftSoundscape />
     </main>
   );
 }

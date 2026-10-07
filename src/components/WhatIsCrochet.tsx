@@ -5,6 +5,7 @@ import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Cpu, ShieldCheck, Sparkles, Infinity, Fingerprint } from 'lucide-react';
+import Tactile3DYarnSkein from './Tactile3DYarnSkein';
 
 export default function WhatIsCrochet() {
   const cards = [
@@ -130,6 +131,11 @@ export default function WhatIsCrochet() {
               </div>
             </motion.div>
           </div>
+        </div>
+
+        {/* Interactive 3D WebGL Tactile Yarn Studio */}
+        <div className="mt-16 max-w-xl mx-auto">
+          <Tactile3DYarnSkein />
         </div>
       </div>
     </section>
