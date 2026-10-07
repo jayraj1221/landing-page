@@ -5,6 +5,7 @@ import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Check, ArrowRight, Eye } from 'lucide-react';
+import CustomKeepsakeStudio from './CustomKeepsakeStudio';
 
 interface ProductItem {
   id: string;
@@ -237,6 +238,9 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
             </motion.div>
           ))}
         </div>
+
+        {/* Interactive Custom Keepsake Studio & Yarn Palette Selector */}
+        <CustomKeepsakeStudio onOpenOrderModal={onOpenOrderModal} />
       </div>
 
       {/* Product Inspection & Inquiry Lightbox Modal */}

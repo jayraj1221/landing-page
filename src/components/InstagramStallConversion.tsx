@@ -6,6 +6,7 @@ import SmoothImage from './SmoothImage';
 import { motion } from 'framer-motion';
 import { Instagram, Sparkles, Heart, ArrowUpRight, CheckCircle2, MessageCircle, Send } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import StallMysterySurprise from './StallMysterySurprise';
 
 interface InstagramStallConversionProps {
   onOpenOrderModal: () => void;
@@ -128,6 +129,9 @@ export default function InstagramStallConversion({ onOpenOrderModal }: Instagram
             </div>
           </div>
         </div>
+
+        {/* Exhibition Stall Delight: Interactive Pull The Thread Perk */}
+        <StallMysterySurprise onOpenOrderModal={(cat, det) => onOpenOrderModal()} />
 
         {/* SECTION 06 & 07: FOUNDER & CONTACT DETAILS */}
         <div id="founder" className="rounded-[40px] bg-parchment-50 border-2 border-parchment-300 p-8 sm:p-12 lg:p-16 shadow-soft-lift">

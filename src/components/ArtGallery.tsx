@@ -1,10 +1,10 @@
 'use client';
-
 import React, { useState } from 'react';
 import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Eye, X, Heart, ExternalLink } from 'lucide-react';
+import { Sparkles, Eye, X, Heart, ExternalLink, ZoomIn } from 'lucide-react';
+import StitchInspectorModal from './StitchInspectorModal';
 
 interface GalleryItem {
   id: string;
@@ -24,6 +24,8 @@ interface ArtGalleryProps {
 
 export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
+  const [inspectorItemId, setInspectorItemId] = useState('jagannath');
 
   const galleryItems: GalleryItem[] = [
     {
@@ -171,6 +173,18 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
               Explore the craftsmanship of Kalapriti. Every piece is an original human creation
               imbued with hundreds of careful stitches, emotional resonance, and permanent durability.
             </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => {
+                  setInspectorItemId('jagannath');
+                  setIsInspectorOpen(true);
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-parchment-200 hover:bg-terracotta hover:text-white border border-parchment-300 text-espresso-800 text-xs font-semibold uppercase tracking-wider transition-all shadow-sm group"
+              >
+                <ZoomIn className="h-4 w-4 text-terracotta group-hover:text-white transition-colors" />
+                <span>Open Macro Stitch Inspector (3.5x Zoom)</span>
+              </button>
+            </div>
           </motion.div>
         </div>
 
@@ -288,7 +302,7 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
                   </div>
                 </div>
 
-                <div className="pt-2 flex gap-3">
+                <div className="pt-2 flex flex-wrap gap-2.5">
                   <button
                     onClick={() => {
                       const itemCat = selectedItem.category;
@@ -296,10 +310,32 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
                       setSelectedItem(null);
                       onOpenOrderModal(itemCat, `Commission inquiry for: ${itemTitle}`);
                     }}
-                    className="flex-1 py-3 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm"
+                    className="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm text-center"
                   >
                     Commission Similar Piece
                   </button>
+
+                  <button
+                    onClick={() => {
+                      const itemId =
+                        selectedItem.id === 'g-1'
+                          ? 'jagannath'
+                          : selectedItem.id === 'g-3'
+                          ? 'ganesha'
+                          : selectedItem.id === 'g-2'
+                          ? 'father-child'
+                          : 'sunflower';
+                      setInspectorItemId(itemId);
+                      setIsInspectorOpen(true);
+                      setSelectedItem(null);
+                    }}
+                    className="p-3 px-3.5 rounded-xl border border-terracotta/40 bg-terracotta/10 hover:bg-terracotta/20 text-terracotta transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                    title="Inspect Micro Stitches"
+                  >
+                    <ZoomIn className="h-4 w-4" />
+                    <span className="hidden sm:inline">Macro Loupe</span>
+                  </button>
+
                   <a
                     href="https://instagram.com/kalapriti_"
                     target="_blank"
@@ -315,6 +351,14 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Macro Stitch Inspector Modal */}
+      <StitchInspectorModal
+        isOpen={isInspectorOpen}
+        onClose={() => setIsInspectorOpen(false)}
+        initialItemId={inspectorItemId}
+        onCommission={(cat, details) => onOpenOrderModal(cat, details)}
+      />
     </section>
   );
 }

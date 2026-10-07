@@ -53,8 +53,73 @@ canvas {
 /* Tactile Linen / Paper grain subtle overlay */
 .bg-tactile-pattern {
   background-color: #FDFBF7;
-  background-image: radial-gradient(rgba(217, 119, 82, 0.05) 1px, transparent 0);
-  background-size: 24px 24px;
+  background-image: 
+    radial-gradient(rgba(217, 119, 82, 0.05) 1px, transparent 0),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+  background-size: 24px 24px, 120px 120px;
+}
+
+/* Handcrafted Running Stitch Border */
+.border-running-stitch {
+  border: 2px dashed #D97752;
+  border-dasharray: 6 4;
+}
+
+/* Washi Tape Accent for Cards & Polaroids */
+.washi-tape-tab {
+  position: absolute;
+  top: -10px;
+  right: 24px;
+  width: 64px;
+  height: 22px;
+  background: rgba(235, 163, 132, 0.55);
+  backdrop-filter: blur(2px);
+  transform: rotate(3deg);
+  border-left: 2px dashed rgba(255, 255, 255, 0.7);
+  border-right: 2px dashed rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 4px rgba(43, 29, 22, 0.08);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.washi-tape-tab-left {
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  width: 64px;
+  height: 22px;
+  background: rgba(139, 158, 110, 0.45);
+  backdrop-filter: blur(2px);
+  transform: rotate(-3deg);
+  border-left: 2px dashed rgba(255, 255, 255, 0.7);
+  border-right: 2px dashed rgba(255, 255, 255, 0.7);
+  box-shadow: 0 2px 4px rgba(43, 29, 22, 0.08);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Craft Stamp Badge */
+.craft-stamp {
+  border: 1.5px dashed currentColor;
+  border-radius: 9999px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Volumetric Light Beam Animation */
+@keyframes lightPulse {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05) rotate(1deg);
+  }
+}
+
+.animate-light-spill {
+  animation: lightPulse 5s ease-in-out infinite;
 }
 
 /* Luxury Editorial Typography utilities */

@@ -12,6 +12,20 @@ interface HeroProps {
 
 export default function Hero({ onOpenOrderModal }: HeroProps) {
   const [doorOpen, setDoorOpen] = useState(false);
+  const [yarnyTapped, setYarnyTapped] = useState(false);
+  const [daisyTapped, setDaisyTapped] = useState(false);
+
+  const triggerYarnyBounce = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setYarnyTapped(true);
+    setTimeout(() => setYarnyTapped(false), 2400);
+  };
+
+  const triggerDaisyBounce = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDaisyTapped(true);
+    setTimeout(() => setDaisyTapped(false), 2400);
+  };
 
   return (
     <section
@@ -89,6 +103,9 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
               transition={{ duration: 0.9, ease: 'easeOut' }}
               className="relative w-full max-w-md aspect-[4/5] rounded-[36px] overflow-hidden shadow-2xl border-4 border-white bg-gradient-to-b from-parchment-100 via-parchment-200 to-parchment-300 p-6 flex flex-col justify-between items-center text-center select-none transform-gpu"
             >
+              {/* Handcrafted Washi Tape Tag on Hero Card */}
+              <div className="washi-tape-tab" />
+
               {/* Magic Door Header */}
               <div className="w-full flex items-center justify-between z-10">
                 <span className="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-white/80 backdrop-blur-md text-terracotta border border-terracotta/20">
@@ -113,6 +130,51 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
                   }
                 }}
               >
+                {/* Volumetric Warm Golden Light Spill (Radiates outwards when open) */}
+                {doorOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 0.85, scale: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute -inset-10 rounded-full pointer-events-none z-10 animate-light-spill"
+                    style={{
+                      background:
+                        'radial-gradient(ellipse at center, rgba(254, 240, 138, 0.45) 0%, rgba(217, 119, 82, 0.15) 55%, transparent 75%)',
+                    }}
+                  />
+                )}
+
+                {/* Drifting Golden Sparkle / Yarn Motes */}
+                {doorOpen && (
+                  <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.span
+                        key={i}
+                        initial={{ y: 20, opacity: 0, scale: 0.6 }}
+                        animate={{
+                          y: [-10, -55],
+                          opacity: [0, 1, 0],
+                          scale: [0.6, 1.1, 0.7],
+                          x: [0, i % 2 === 0 ? 12 : -12],
+                        }}
+                        transition={{
+                          duration: 2.4 + i * 0.4,
+                          repeat: Infinity,
+                          delay: i * 0.3,
+                          ease: 'easeOut',
+                        }}
+                        className="absolute text-amber-500 font-bold text-xs"
+                        style={{
+                          left: `${20 + i * 14}%`,
+                          bottom: '30%',
+                        }}
+                      >
+                        ✦
+                      </motion.span>
+                    ))}
+                  </div>
+                )}
+
                 {/* Background Interior Glow (Visible when door opens) */}
                 <div className="absolute inset-x-4 inset-y-2 rounded-t-full bg-gradient-to-b from-amber-100 via-peach/40 to-terracotta/30 shadow-inner flex flex-col items-center justify-center p-4 overflow-hidden border-2 border-dashed border-terracotta/30">
                   <div className="relative w-36 h-36 rounded-2xl overflow-hidden shadow-md mb-2">
@@ -173,33 +235,66 @@ export default function Hero({ onOpenOrderModal }: HeroProps) {
                 </div>
               </div>
 
-              {/* Cute Yarn Character 1 (Left - Waving Little Yarn Ball) */}
+              {/* Living Yarn Character 1 (Left - "Yarny", Responsive to Taps) */}
               <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ repeat: Infinity, duration: 2.4, ease: 'easeInOut' }}
-                className="absolute bottom-4 left-3 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-lg border border-parchment-200 flex items-center gap-2 max-w-[155px]"
+                animate={{
+                  y: yarnyTapped ? [-12, 0, -8, 0] : [0, -6, 0],
+                  scale: yarnyTapped ? [1, 1.2, 0.95, 1] : 1,
+                }}
+                transition={{
+                  repeat: yarnyTapped ? 0 : Infinity,
+                  duration: yarnyTapped ? 0.6 : 2.4,
+                  ease: 'easeInOut',
+                }}
+                onClick={triggerYarnyBounce}
+                className="absolute bottom-4 left-3 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-lg border border-parchment-200 flex items-center gap-2 max-w-[165px] cursor-pointer group hover:scale-105 transition-transform"
+                role="button"
+                tabIndex={0}
+                aria-label="Tap Yarny the Mascot"
               >
-                <div className="w-8 h-8 rounded-full bg-peach-dark flex items-center justify-center text-white text-base shadow flex-shrink-0 animate-bounce">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-terracotta to-coral flex items-center justify-center text-white text-lg shadow flex-shrink-0 group-hover:rotate-12 transition-transform">
                   🧶
                 </div>
                 <div className="text-left leading-tight">
-                  <p className="text-[10px] font-bold text-espresso-900">Yarny Waves!</p>
-                  <p className="text-[9px] text-terracotta font-medium">"Welcome friend!"</p>
+                  <p className="text-[10px] font-bold text-espresso-900 flex items-center gap-1">
+                    Yarny
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  </p>
+                  <p className="text-[9px] text-terracotta font-medium">
+                    {yarnyTapped ? '“Loops of love!” ♡' : '“Tap to say hi!”'}
+                  </p>
                 </div>
               </motion.div>
 
-              {/* Cute Yarn Character 2 (Right - Little Crochet Hook Character) */}
+              {/* Living Mascot Character 2 (Right - "Daisy Hook", Responsive to Taps) */}
               <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut', delay: 0.3 }}
-                className="absolute bottom-4 right-3 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-lg border border-parchment-200 flex items-center gap-2 max-w-[155px]"
+                animate={{
+                  y: daisyTapped ? [-12, 0, -8, 0] : [0, -6, 0],
+                  scale: daisyTapped ? [1, 1.2, 0.95, 1] : 1,
+                }}
+                transition={{
+                  repeat: daisyTapped ? 0 : Infinity,
+                  duration: daisyTapped ? 0.6 : 2.8,
+                  ease: 'easeInOut',
+                  delay: daisyTapped ? 0 : 0.3,
+                }}
+                onClick={triggerDaisyBounce}
+                className="absolute bottom-4 right-3 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 shadow-lg border border-parchment-200 flex items-center gap-2 max-w-[165px] cursor-pointer group hover:scale-105 transition-transform"
+                role="button"
+                tabIndex={0}
+                aria-label="Tap Daisy Hook the Mascot"
               >
-                <div className="w-8 h-8 rounded-full bg-sage-dark flex items-center justify-center text-white text-base shadow flex-shrink-0 animate-pulse">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sage to-sage-dark flex items-center justify-center text-white text-lg shadow flex-shrink-0 group-hover:-rotate-12 transition-transform">
                   🪡
                 </div>
                 <div className="text-left leading-tight">
-                  <p className="text-[10px] font-bold text-espresso-900">Hooked Joy</p>
-                  <p className="text-[9px] text-sage-dark font-medium">"100% Handmade"</p>
+                  <p className="text-[10px] font-bold text-espresso-900 flex items-center gap-1">
+                    Daisy Hook
+                    <span className="text-[9px]">🌸</span>
+                  </p>
+                  <p className="text-[9px] text-sage-dark font-medium">
+                    {daisyTapped ? '“100% Hand-made!”' : '“Tap to poke!”'}
+                  </p>
                 </div>
               </motion.div>
             </motion.div>

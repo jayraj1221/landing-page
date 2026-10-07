@@ -13,6 +13,9 @@ import ModernSustainability from '@/components/ModernSustainability';
 import InstagramStallConversion from '@/components/InstagramStallConversion';
 import Footer from '@/components/Footer';
 import OrderInquiryModal from '@/components/OrderInquiryModal';
+import ScrollThreadPath from '@/components/ScrollThreadPath';
+import CustomCrochetCursor from '@/components/CustomCrochetCursor';
+import FloatingStallDock from '@/components/FloatingStallDock';
 
 export default function Home() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
@@ -67,6 +70,15 @@ export default function Home() {
         initialCategory={modalInitialCategory}
         initialDetails={modalInitialDetails}
       />
+
+      {/* 12. The Living Golden Thread Scroll Scrollytelling Path */}
+      <ScrollThreadPath />
+
+      {/* 13. Mobile Exhibition Stall Quick-Action Floating Dock */}
+      <FloatingStallDock onOpenOrderModal={() => handleOpenOrderModal()} />
+
+      {/* 14. Desktop Handcrafted Crochet Hook Cursor */}
+      <CustomCrochetCursor />
     </main>
   );
 }
