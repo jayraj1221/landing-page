@@ -62,7 +62,6 @@ canvas {
 /* Handcrafted Running Stitch Border */
 .border-running-stitch {
   border: 2px dashed #D97752;
-  border-dasharray: 6 4;
 }
 
 /* Washi Tape Accent for Cards & Polaroids */

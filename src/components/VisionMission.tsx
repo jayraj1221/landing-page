@@ -51,8 +51,11 @@ export default function VisionMission() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px 0px 60px 0px' }}
             transition={{ duration: 0.7 }}
-            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-terracotta/40 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
+            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-dashed border-terracotta/30 shadow-soft-lift hover:shadow-xl hover:border-terracotta/60 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
           >
+            {/* Handcrafted Washi Tape Tab */}
+            <div className="washi-tape-tab-left" />
+
             {/* Top decorative badge */}
             <div className="flex items-center justify-between mb-6">
               <div className="h-12 w-12 rounded-2xl bg-terracotta/10 text-terracotta flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -85,8 +88,11 @@ export default function VisionMission() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '0px 0px 60px 0px' }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-parchment-300 shadow-soft-lift hover:shadow-xl hover:border-sage/50 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
+            className="p-8 sm:p-10 rounded-[32px] bg-parchment-50 border-2 border-dashed border-sage/40 shadow-soft-lift hover:shadow-xl hover:border-sage/70 transition-all duration-300 flex flex-col justify-between relative overflow-hidden group transform-gpu"
           >
+            {/* Handcrafted Washi Tape Tab */}
+            <div className="washi-tape-tab" />
+
             {/* Top decorative badge */}
             <div className="flex items-center justify-between mb-6">
               <div className="h-12 w-12 rounded-2xl bg-sage/20 text-sage-dark flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
