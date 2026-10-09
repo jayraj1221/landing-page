@@ -1,7 +1,9 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Cormorant_Garamond, Playfair_Display, Plus_Jakarta_Sans, Caveat } from 'next/font/google';
 import './globals.css';
 import SmoothScroll from '@/components/SmoothScroll';
+import { ToastProvider } from '@/components/ModernToast';
+import PWACompanion from '@/components/PWACompanion';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -31,6 +33,12 @@ const caveat = Caveat({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  themeColor: '#D97752',
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: 'KALAPRITI (कलाप्रिति) | Loops of Love — Handcrafted Crochet & Custom Creations',
   description:
@@ -47,6 +55,7 @@ export const metadata: Metadata = {
     'Personalized Gifting',
     'Baby Crochet',
   ],
+  manifest: '/manifest.webmanifest',
   icons: {
     icon: '/assets/logo.jpg',
   },
@@ -63,9 +72,12 @@ export default function RootLayout({
       className={`${cormorant.variable} ${playfair.variable} ${jakarta.variable} ${caveat.variable}`}
     >
       <body className="bg-parchment-50 text-espresso-900 antialiased selection:bg-terracotta/20 selection:text-espresso-900">
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <ToastProvider>
+          <PWACompanion />
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+        </ToastProvider>
       </body>
     </html>
   );

@@ -1,9 +1,12 @@
-'use client';
-
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Sparkles, Scissors, ArrowLeftRight, Heart, Camera } from 'lucide-react';
+import { Sparkles, Scissors, ArrowLeftRight, Heart, Camera, Share2 } from 'lucide-react';
+import { executeViewTransition } from '@/utils/viewTransitions';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface TransformationPair {
   id: string;
@@ -64,6 +67,8 @@ export default function MemoryTransformSlider({
   const [activePair, setActivePair] = useState(PAIRS[0]);
   const [sliderPosition, setSliderPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const lastSliderHaptic = useRef(0);
+  const { showToast } = useToast();
 
   const handleMove = (clientX: number) => {
     if (!containerRef.current) return;
@@ -71,6 +76,13 @@ export default function MemoryTransformSlider({
     const x = clientX - rect.left;
     const percentage = Math.max(5, Math.min(95, (x / rect.width) * 100));
     setSliderPosition(percentage);
+
+    const now = Date.now();
+    if (now - lastSliderHaptic.current > 150) {
+      lastSliderHaptic.current = now;
+      triggerHaptic('selection');
+      proceduralAudio.playYarnGlide();
+    }
   };
 
   const onMouseMove = (e: React.MouseEvent) => handleMove(e.clientX);
@@ -99,14 +111,18 @@ export default function MemoryTransformSlider({
             Drag the wooden hook slider to witness how 2D flat memories are sculpted into tangible loops of love.
           </p>
 
-          {/* Preset Buttons */}
+          {/* Preset Buttons with View Transitions */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {PAIRS.map((pair) => (
               <button
                 key={pair.id}
                 onClick={() => {
-                  setActivePair(pair);
-                  setSliderPosition(50);
+                  triggerHaptic('light');
+                  proceduralAudio.playWoodenHookClick();
+                  executeViewTransition(() => {
+                    setActivePair(pair);
+                    setSliderPosition(50);
+                  });
                 }}
                 className={`px-4 py-2 rounded-full text-xs font-semibold transition-all ${
                   activePair.id === pair.id
@@ -197,18 +213,43 @@ export default function MemoryTransformSlider({
               </p>
             </div>
 
-            <button
-              onClick={() =>
-                onOpenOrderModal(
-                  'Custom Portrait Keepsake',
-                  `Inquiry inspired by ${activePair.title} (Photo-to-Doll transformation)`
-                )
-              }
-              className="py-3.5 px-6 rounded-full bg-gradient-to-r from-terracotta to-coral hover:opacity-95 text-white font-semibold text-xs uppercase tracking-wider shadow-md whitespace-nowrap flex items-center gap-2 transition-transform active:scale-95"
-            >
-              <Sparkles className="h-4 w-4" />
-              <span>Turn My Photo Into Keepsake</span>
-            </button>
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={async () => {
+                  triggerHaptic('medium');
+                  const res = await shareOrCopy({
+                    title: `${activePair.title} — Kalapriti Memory Transformation`,
+                    text: `${activePair.subtitle}: ${activePair.story}`,
+                    url: window.location.href,
+                  });
+                  if (res.result === 'shared') {
+                    showToast('Transformation story shared!', undefined, 'share');
+                  } else if (res.result === 'copied') {
+                    showToast('Link copied to clipboard!', undefined, 'share');
+                  }
+                }}
+                className="p-3.5 rounded-full border border-parchment-300 hover:bg-parchment-200 text-espresso-700 transition-colors"
+                title="Share this transformation story"
+                aria-label="Share transformation story"
+              >
+                <Share2 className="h-4 w-4 text-terracotta" />
+              </button>
+
+              <button
+                onClick={() => {
+                  triggerHaptic('light');
+                  proceduralAudio.playWoodenHookClick();
+                  onOpenOrderModal(
+                    'Custom Portrait Keepsake',
+                    `Inquiry inspired by ${activePair.title} (Photo-to-Doll transformation)`
+                  );
+                }}
+                className="py-3.5 px-6 rounded-full bg-gradient-to-r from-terracotta to-coral hover:opacity-95 text-white font-semibold text-xs uppercase tracking-wider shadow-md whitespace-nowrap flex items-center gap-2 transition-transform active:scale-95"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>Turn My Photo Into Keepsake</span>
+              </button>
+            </div>
           </div>
         </div>
 

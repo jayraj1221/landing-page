@@ -4,11 +4,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { motion } from 'framer-motion';
 import { RotateCw, Sparkles, Hand } from 'lucide-react';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { useToast } from './ModernToast';
 
 export default function Tactile3DYarnSkein() {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [activeColor, setActiveColor] = useState('#D97752');
+  const tilt = useDeviceTilt();
+  const { showToast } = useToast();
 
   const COLOR_OPTIONS = [
     { name: 'Terracotta', hex: '#D97752' },
@@ -282,7 +288,11 @@ export default function Tactile3DYarnSkein() {
         {COLOR_OPTIONS.map((c) => (
           <button
             key={c.hex}
-            onClick={() => setActiveColor(c.hex)}
+            onClick={() => {
+              triggerHaptic('selection');
+              proceduralAudio.playYarnGlide();
+              setActiveColor(c.hex);
+            }}
             className={`h-7 px-2.5 rounded-full text-[10px] font-bold flex items-center gap-1.5 transition-all ${
               activeColor === c.hex
                 ? 'bg-espresso-900 text-white shadow-md scale-105'

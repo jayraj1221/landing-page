@@ -3,8 +3,14 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Eye, X, Heart, ExternalLink, ZoomIn } from 'lucide-react';
+import { Sparkles, Eye, X, Heart, ExternalLink, ZoomIn, Share2 } from 'lucide-react';
 import StitchInspectorModal from './StitchInspectorModal';
+import StitchMagnifierLoupe from './StitchMagnifierLoupe';
+import { executeViewTransition } from '@/utils/viewTransitions';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface GalleryItem {
   id: string;
@@ -26,6 +32,7 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const [inspectorItemId, setInspectorItemId] = useState('jagannath');
+  const { showToast } = useToast();
 
   const galleryItems: GalleryItem[] = [
     {
@@ -197,7 +204,13 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px 0px 80px 0px' }}
               transition={{ duration: 0.6, delay: (index % 2) * 0.08 }}
-              onClick={() => setSelectedItem(item)}
+              onClick={() => {
+                triggerHaptic('light');
+                proceduralAudio.playWoodenHookClick();
+                executeViewTransition(() => {
+                  setSelectedItem(item);
+                });
+              }}
               className={`${item.colSpan} group cursor-pointer relative rounded-3xl overflow-hidden bg-parchment-200 border-2 border-white shadow-tactile transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5 transform-gpu`}
             >
               <div className={`relative w-full ${item.aspect} overflow-hidden`}>
@@ -238,7 +251,7 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
         </div>
       </div>
 
-      {/* Detail Inspection Modal */}
+      {/* Detail Inspection Modal with Modern Macro Stitch Loupe */}
       <AnimatePresence>
         {selectedItem && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
@@ -246,7 +259,9 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedItem(null)}
+              onClick={() => {
+                executeViewTransition(() => setSelectedItem(null));
+              }}
               className="fixed inset-0 bg-espresso-900/70 backdrop-blur-md"
             />
 
@@ -254,23 +269,25 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-3xl rounded-[32px] bg-parchment-50 overflow-hidden shadow-2xl border border-parchment-300 grid grid-cols-1 md:grid-cols-2 text-espresso-900"
+              className="relative w-full max-w-3xl rounded-[32px] bg-parchment-50 overflow-hidden shadow-2xl border border-parchment-300 grid grid-cols-1 md:grid-cols-2 text-espresso-900 max-h-[90vh] overflow-y-auto"
             >
               <button
-                onClick={() => setSelectedItem(null)}
+                onClick={() => {
+                  executeViewTransition(() => setSelectedItem(null));
+                }}
                 aria-label="Close modal"
-                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/80 backdrop-blur-md text-espresso-800 hover:bg-white transition-colors"
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md text-espresso-800 hover:bg-white transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
 
-              <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200">
-                <SmoothImage
-                  src={selectedItem.image}
+              {/* Interactive Macro Stitch Loupe inside Modal */}
+              <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200 min-h-[300px]">
+                <StitchMagnifierLoupe
+                  imageSrc={selectedItem.image}
                   alt={selectedItem.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  caption="Inspect Handcrafted Stitch Loops"
+                  className="w-full h-full min-h-[300px]"
                 />
               </div>
 
@@ -313,6 +330,26 @@ export default function ArtGallery({ onOpenOrderModal }: ArtGalleryProps) {
                     className="flex-1 py-3 px-4 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm text-center"
                   >
                     Commission Similar Piece
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      triggerHaptic('medium');
+                      const res = await shareOrCopy({
+                        title: `${selectedItem.title} — Kalapriti`,
+                        text: `Take a look at this handcrafted ${selectedItem.category} heirloom from Kalapriti!`,
+                        url: window.location.href,
+                      });
+                      if (res.result === 'shared') {
+                        showToast('Shared piece with friends!', undefined, 'share');
+                      } else if (res.result === 'copied') {
+                        showToast('Link copied to clipboard!', undefined, 'share');
+                      }
+                    }}
+                    className="p-3 rounded-xl border border-parchment-300 hover:bg-parchment-200 text-espresso-800 transition-colors"
+                    title="Share this artwork"
+                  >
+                    <Share2 className="h-4 w-4 text-terracotta" />
                   </button>
 
                   <button

@@ -1,9 +1,12 @@
-'use client';
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Palette, Sparkles, Heart, Check, Send, MessageCircle, ArrowRight } from 'lucide-react';
+import { Palette, Sparkles, Heart, Check, Send, MessageCircle, ArrowRight, Share2 } from 'lucide-react';
 import Image from 'next/image';
+import { executeViewTransition } from '@/utils/viewTransitions';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface CustomKeepsakeStudioProps {
   onOpenOrderModal: (category?: string, details?: string) => void;
@@ -57,8 +60,11 @@ export default function CustomKeepsakeStudio({ onOpenOrderModal }: CustomKeepsak
   const [selectedKeepsake, setSelectedKeepsake] = useState(KEEPSAKE_TYPES[0]);
   const [selectedYarn, setSelectedYarn] = useState(YARN_PALETTES[0]);
   const [personalizationNote, setPersonalizationNote] = useState('');
+  const { showToast } = useToast();
 
   const handleCreateInquiry = () => {
+    triggerHaptic('light');
+    proceduralAudio.playWoodenHookClick(1.2);
     const details = `Custom Concept: ${selectedKeepsake.title} | Yarn Mood: ${selectedYarn.name} (${selectedYarn.mood}) | Special Request: ${personalizationNote.trim() || 'Custom color matching from photo'}`;
     onOpenOrderModal(selectedKeepsake.category, details);
   };
@@ -104,7 +110,13 @@ export default function CustomKeepsakeStudio({ onOpenOrderModal }: CustomKeepsak
                 return (
                   <button
                     key={type.id}
-                    onClick={() => setSelectedKeepsake(type)}
+                    onClick={() => {
+                      triggerHaptic('light');
+                      proceduralAudio.playWoodenHookClick();
+                      executeViewTransition(() => {
+                        setSelectedKeepsake(type);
+                      });
+                    }}
                     className={`p-3.5 rounded-2xl text-left border-2 transition-all relative overflow-hidden ${
                       isSelected
                         ? 'border-terracotta bg-white shadow-md'
@@ -145,7 +157,13 @@ export default function CustomKeepsakeStudio({ onOpenOrderModal }: CustomKeepsak
                 return (
                   <button
                     key={yarn.id}
-                    onClick={() => setSelectedYarn(yarn)}
+                    onClick={() => {
+                      triggerHaptic('selection');
+                      proceduralAudio.playYarnGlide();
+                      executeViewTransition(() => {
+                        setSelectedYarn(yarn);
+                      });
+                    }}
                     className={`p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between gap-1.5 transition-all text-center ${
                       isSelected
                         ? 'border-espresso-900 bg-white shadow-md scale-105'
@@ -240,15 +258,38 @@ export default function CustomKeepsakeStudio({ onOpenOrderModal }: CustomKeepsak
               </div>
             </div>
 
-            {/* Direct Inquiry CTA Button */}
-            <button
-              onClick={handleCreateInquiry}
-              className="w-full py-4 rounded-full bg-gradient-to-r from-terracotta via-coral to-terracotta-dark text-white font-semibold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2 active:scale-95"
-            >
-              <Sparkles className="h-4 w-4" />
-              <span>Inquire With This Vision</span>
-              <ArrowRight className="h-4 w-4" />
-            </button>
+            {/* Direct Inquiry CTA Button with Share Vision */}
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={async () => {
+                  triggerHaptic('medium');
+                  const res = await shareOrCopy({
+                    title: `Custom ${selectedKeepsake.title} — Kalapriti Studio`,
+                    text: `My bespoke concept: ${selectedKeepsake.title} crafted in ${selectedYarn.name} yarn palette (${selectedYarn.mood}). ${personalizationNote ? `Note: "${personalizationNote}"` : ''}`,
+                    url: window.location.href,
+                  });
+                  if (res.result === 'shared') {
+                    showToast('Custom vision shared!', undefined, 'share');
+                  } else if (res.result === 'copied') {
+                    showToast('Vision summary copied to clipboard!', undefined, 'share');
+                  }
+                }}
+                className="p-3.5 rounded-full border border-parchment-300 hover:bg-parchment-200 text-espresso-700 transition-colors flex items-center justify-center flex-shrink-0"
+                title="Share this keepsake concept"
+                aria-label="Share concept"
+              >
+                <Share2 className="h-4 w-4 text-terracotta" />
+              </button>
+
+              <button
+                onClick={handleCreateInquiry}
+                className="flex-1 py-4 rounded-full bg-gradient-to-r from-terracotta via-coral to-terracotta-dark text-white font-semibold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2 active:scale-95"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>Inquire With This Vision</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>

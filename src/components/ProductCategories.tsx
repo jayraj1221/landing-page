@@ -4,8 +4,14 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import SmoothImage from './SmoothImage';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Heart, Check, ArrowRight, Eye } from 'lucide-react';
+import { Sparkles, Heart, Check, ArrowRight, Eye, Share2 } from 'lucide-react';
 import CustomKeepsakeStudio from './CustomKeepsakeStudio';
+import StitchMagnifierLoupe from './StitchMagnifierLoupe';
+import { executeViewTransition } from '@/utils/viewTransitions';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface ProductItem {
   id: string;
@@ -24,6 +30,7 @@ interface ProductCategoriesProps {
 export default function ProductCategories({ onOpenOrderModal }: ProductCategoriesProps) {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [activeProduct, setActiveProduct] = useState<ProductItem | null>(null);
+  const { showToast } = useToast();
 
   const categoriesList = [
     { key: 'all', label: 'All Creations' },
@@ -170,10 +177,16 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
           {categoriesList.map((cat) => (
             <button
               key={cat.key}
-              onClick={() => setSelectedFilter(cat.key)}
+              onClick={() => {
+                triggerHaptic('light');
+                proceduralAudio.playWoodenHookClick();
+                executeViewTransition(() => {
+                  setSelectedFilter(cat.key);
+                });
+              }}
               className={`px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap ${
                 selectedFilter === cat.key
-                  ? 'bg-espresso-900 text-white shadow-sm'
+                  ? 'bg-espresso-900 text-white shadow-sm scale-105'
                   : 'bg-parchment-50 text-espresso-700 hover:bg-parchment-200 border border-parchment-300'
               }`}
             >
@@ -182,7 +195,7 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
           ))}
         </div>
 
-        {/* Clean 2-column mobile grid / 4-column desktop grid (from brief) */}
+        {/* Clean 2-column mobile grid / 4-column desktop grid with CSS Container Queries */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           {filtered.map((item, idx) => (
             <motion.div
@@ -191,8 +204,14 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '0px 0px 60px 0px' }}
               transition={{ duration: 0.5, delay: (idx % 2) * 0.08 }}
-              onClick={() => setActiveProduct(item)}
-              className="group cursor-pointer rounded-3xl bg-parchment-50 border border-parchment-300 overflow-hidden shadow-soft-lift hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
+              onClick={() => {
+                triggerHaptic('light');
+                proceduralAudio.playWoodenHookClick();
+                executeViewTransition(() => {
+                  setActiveProduct(item);
+                });
+              }}
+              className="cq-card-context group cursor-pointer rounded-3xl bg-parchment-50 border border-parchment-300 overflow-hidden shadow-soft-lift hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between"
             >
               {/* Product Image */}
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-parchment-200">
@@ -251,7 +270,9 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setActiveProduct(null)}
+              onClick={() => {
+                executeViewTransition(() => setActiveProduct(null));
+              }}
               className="fixed inset-0 bg-espresso-900/70 backdrop-blur-sm"
             />
 
@@ -259,15 +280,14 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl rounded-[32px] bg-parchment-50 overflow-hidden shadow-2xl border border-parchment-300 grid grid-cols-1 md:grid-cols-2 text-espresso-900"
+              className="relative w-full max-w-2xl rounded-[32px] bg-parchment-50 overflow-hidden shadow-2xl border border-parchment-300 grid grid-cols-1 md:grid-cols-2 text-espresso-900 max-h-[90vh] overflow-y-auto"
             >
-              <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200">
-                <SmoothImage
-                  src={activeProduct.image}
+              <div className="relative aspect-[4/5] md:aspect-auto md:h-full bg-parchment-200 min-h-[280px]">
+                <StitchMagnifierLoupe
+                  imageSrc={activeProduct.image}
                   alt={activeProduct.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  caption="Inspect Handcrafted Weave"
+                  className="w-full h-full min-h-[280px]"
                 />
               </div>
 
@@ -294,19 +314,46 @@ export default function ProductCategories({ onOpenOrderModal }: ProductCategorie
                 </div>
 
                 <div className="pt-4 border-t border-parchment-200 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={async () => {
+                        triggerHaptic('medium');
+                        const res = await shareOrCopy({
+                          title: `${activeProduct.name} — Kalapriti`,
+                          text: `Check out ${activeProduct.name} (${activeProduct.category}) handcrafted with loops of love!`,
+                          url: window.location.href,
+                        });
+                        if (res.result === 'shared') {
+                          showToast('Product shared with friends!', undefined, 'share');
+                        } else if (res.result === 'copied') {
+                          showToast('Link copied to clipboard!', undefined, 'share');
+                        }
+                      }}
+                      className="p-3 rounded-xl border border-parchment-300 hover:bg-parchment-200 text-espresso-700 transition-colors flex items-center justify-center"
+                      title="Share Product"
+                      aria-label="Share Product"
+                    >
+                      <Share2 className="h-4 w-4 text-terracotta" />
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        triggerHaptic('light');
+                        const itemCat = activeProduct.category;
+                        const itemName = activeProduct.name;
+                        setActiveProduct(null);
+                        onOpenOrderModal(itemCat, `Inquiry about: ${itemName}`);
+                      }}
+                      className="flex-1 py-3 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm flex items-center justify-center gap-2"
+                    >
+                      <Sparkles className="h-4 w-4" /> Request Custom Creation
+                    </button>
+                  </div>
+
                   <button
                     onClick={() => {
-                      const itemCat = activeProduct.category;
-                      const itemName = activeProduct.name;
-                      setActiveProduct(null);
-                      onOpenOrderModal(itemCat, `Inquiry about: ${itemName}`);
+                      executeViewTransition(() => setActiveProduct(null));
                     }}
-                    className="w-full py-3 rounded-xl bg-terracotta text-white text-xs font-semibold uppercase tracking-wider hover:bg-terracotta-dark transition-colors shadow-sm flex items-center justify-center gap-2"
-                  >
-                    <Sparkles className="h-4 w-4" /> Request Custom Creation
-                  </button>
-                  <button
-                    onClick={() => setActiveProduct(null)}
                     className="w-full py-2.5 rounded-xl border border-parchment-300 text-espresso-700 text-xs font-medium hover:bg-parchment-200 transition-colors"
                   >
                     Close

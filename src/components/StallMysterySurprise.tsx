@@ -2,8 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Gift, Instagram, Check, Heart, ArrowRight } from 'lucide-react';
+import { Sparkles, Gift, Instagram, Check, Heart, ArrowRight, Share2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface StallMysterySurpriseProps {
   onOpenOrderModal: (category?: string, details?: string) => void;
@@ -12,14 +16,20 @@ interface StallMysterySurpriseProps {
 export default function StallMysterySurprise({ onOpenOrderModal }: StallMysterySurpriseProps) {
   const [unraveled, setUnraveled] = useState(false);
   const [isPulling, setIsPulling] = useState(false);
+  const { showToast } = useToast();
 
   const handlePullThread = () => {
     if (unraveled) return;
     setIsPulling(true);
+    triggerHaptic('medium');
+    proceduralAudio.playYarnGlide();
 
     setTimeout(() => {
       setUnraveled(true);
       setIsPulling(false);
+      triggerHaptic('celebration');
+      proceduralAudio.playCraftChime(987.77);
+      showToast('Stall Perk Unlocked! 🎉', 'Show code STALL-PERK for your free Daisy Charm', 'sparkle');
       try {
         confetti({
           particleCount: 70,
@@ -123,12 +133,35 @@ export default function StallMysterySurprise({ onOpenOrderModal }: StallMysteryS
 
               <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
                 <button
-                  onClick={() =>
+                  onClick={async () => {
+                    triggerHaptic('medium');
+                    const res = await shareOrCopy({
+                      title: 'Kalapriti Exhibition Stall Perk Unlocked!',
+                      text: 'I just unlocked a complimentary hand-crocheted Daisy Charm perk at the Kalapriti exhibition stall! Use code STALL-PERK',
+                      url: window.location.href,
+                    });
+                    if (res.result === 'shared') {
+                      showToast('Perk shared with friends!', undefined, 'share');
+                    } else if (res.result === 'copied') {
+                      showToast('Perk code copied to clipboard!', undefined, 'share');
+                    }
+                  }}
+                  className="p-3 rounded-full border border-parchment-300 hover:bg-parchment-200 text-espresso-700 transition-colors flex items-center justify-center"
+                  title="Share Stall Perk"
+                  aria-label="Share Stall Perk"
+                >
+                  <Share2 className="h-4 w-4 text-terracotta" />
+                </button>
+
+                <button
+                  onClick={() => {
+                    triggerHaptic('light');
+                    proceduralAudio.playWoodenHookClick();
                     onOpenOrderModal(
                       'Stall Exhibition Perk',
                       'Claimed Stall Visitor Perk: Complimentary Hand-Crocheted Daisy Charm (Code: STALL-PERK)'
-                    )
-                  }
+                    );
+                  }}
                   className="flex-1 py-3 px-4 rounded-full bg-terracotta text-white font-semibold text-xs uppercase tracking-wider hover:bg-terracotta-dark transition-all text-center flex items-center justify-center gap-1.5"
                 >
                   <Sparkles className="h-3.5 w-3.5" />
@@ -139,6 +172,7 @@ export default function StallMysterySurprise({ onOpenOrderModal }: StallMysteryS
                   href="https://www.instagram.com/kalapriti_/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => triggerHaptic('light')}
                   className="py-3 px-5 rounded-full bg-parchment-200 hover:bg-parchment-300 text-espresso-800 font-semibold text-xs uppercase tracking-wider transition-all text-center flex items-center justify-center gap-1.5"
                 >
                   <Instagram className="h-3.5 w-3.5 text-coral" />

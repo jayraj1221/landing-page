@@ -163,3 +163,83 @@ canvas {
     scroll-behavior: auto !important;
   }
 }
+
+/* -------------------------------------------------------------
+ * MODERN WEB CSS ENHANCEMENTS (Baseline 2024–2026)
+ * ----------------------------------------------------------- */
+
+/* 1. OKLCH Perceptual Wide-Gamut Palette & Color Mixing */
+:root {
+  --terracotta-oklch: oklch(0.64 0.16 38.5);
+  --sage-oklch: oklch(0.66 0.08 128.2);
+  --ochre-oklch: oklch(0.72 0.15 78.4);
+  --parchment-oklch: oklch(0.98 0.01 75);
+}
+
+/* 2. Modern CSS Scroll-Driven Animation Progress Bar */
+@supports (animation-timeline: scroll()) {
+  .scroll-driven-thread-indicator {
+    transform-origin: left center;
+    animation: scrollDraw auto linear forwards;
+    animation-timeline: scroll(root block);
+  }
+
+  @keyframes scrollDraw {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+}
+
+/* 3. Modern View Transitions API Smooth Morphing */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(stall-item),
+::view-transition-new(stall-item) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* 4. Modern CSS Container Queries for Modular Responsive Components */
+.cq-card-context {
+  container-type: inline-size;
+  container-name: productCard;
+}
+
+@container productCard (min-width: 340px) {
+  .cq-badge-responsive {
+    display: inline-flex !important;
+  }
+}
+
+/* 5. Modern @starting-style Entry Animations */
+@supports (@starting-style) {
+  .modern-popover-entry {
+    transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @starting-style {
+    .modern-popover-entry {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+}
+

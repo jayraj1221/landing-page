@@ -1,81 +1,26 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { triggerHaptic } from '@/utils/haptics';
+import { useToast } from './ModernToast';
 
 export default function CraftSoundscape() {
   const [isEnabled, setIsEnabled] = useState(false);
-  const audioCtxRef = useRef<AudioContext | null>(null);
-
-  const initAudio = () => {
-    if (!audioCtxRef.current && typeof window !== 'undefined') {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (AudioCtx) {
-        audioCtxRef.current = new AudioCtx();
-      }
-    }
-    if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
-      audioCtxRef.current.resume();
-    }
-  };
-
-  const playWoodenClick = () => {
-    if (!isEnabled || !audioCtxRef.current) return;
-    try {
-      const ctx = audioCtxRef.current;
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(420, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(140, ctx.currentTime + 0.04);
-
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + 0.05);
-    } catch {
-      // Ignore
-    }
-  };
-
-  const playChime = () => {
-    if (!isEnabled || !audioCtxRef.current) return;
-    try {
-      const ctx = audioCtxRef.current;
-      const freqs = [523.25, 659.25, 783.99]; // C5, E5, G5 major triad
-      freqs.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.06);
-
-        gain.gain.setValueAtTime(0.08, ctx.currentTime + idx * 0.06);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.06 + 0.35);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(ctx.currentTime + idx * 0.06);
-        osc.stop(ctx.currentTime + idx * 0.06 + 0.4);
-      });
-    } catch {
-      // Ignore
-    }
-  };
+  const { showToast } = useToast();
 
   const toggleSound = () => {
-    if (!isEnabled) {
-      initAudio();
-      setIsEnabled(true);
-      setTimeout(() => playChime(), 100);
+    const nextState = !isEnabled;
+    setIsEnabled(nextState);
+    proceduralAudio.setMuted(!nextState);
+    triggerHaptic('medium');
+
+    if (nextState) {
+      proceduralAudio.playCraftChime(659.25);
+      showToast('Tactile ASMR Enabled 🎧', 'Experience synthesized wooden hook taps and thread sounds', 'sparkle');
     } else {
-      setIsEnabled(false);
+      showToast('Sound Muted', undefined, 'info');
     }
   };
 
@@ -89,7 +34,7 @@ export default function CraftSoundscape() {
         target &&
         (target.closest('button') || target.closest('a') || target.closest('[role="button"]'))
       ) {
-        playWoodenClick();
+        proceduralAudio.playWoodenHookClick();
       }
     };
 

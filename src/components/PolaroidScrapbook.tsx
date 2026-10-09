@@ -1,9 +1,12 @@
-'use client';
-
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Pin, Sparkles, Heart, RotateCcw } from 'lucide-react';
+import { Pin, Sparkles, Heart, RotateCcw, Share2 } from 'lucide-react';
+import { useDeviceTilt } from '@/hooks/useDeviceTilt';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
 
 interface PolaroidNote {
   id: string;
@@ -65,8 +68,12 @@ const POLAROIDS: PolaroidNote[] = [
 
 export default function PolaroidScrapbook() {
   const [flippedId, setFlippedId] = useState<string | null>(null);
+  const tilt = useDeviceTilt();
+  const { showToast } = useToast();
 
   const toggleFlip = (id: string) => {
+    triggerHaptic('light');
+    proceduralAudio.playWoodenHookClick(0.9);
     setFlippedId(flippedId === id ? null : id);
   };
 
@@ -106,12 +113,16 @@ export default function PolaroidScrapbook() {
                 </div>
               </div>
 
-              {/* 3D Flip Card Container */}
+              {/* 3D Flip Card Container with Gyroscope Tilt */}
               <div
                 className="relative w-full aspect-[4/5] transition-transform duration-700 transform-gpu"
                 style={{
                   transformStyle: 'preserve-3d',
-                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  transform: isFlipped
+                    ? 'rotateY(180deg)'
+                    : `rotateY(${tilt.isActive ? tilt.tiltX * 12 : 0}deg) rotateX(${
+                        tilt.isActive ? -tilt.tiltY * 12 : 0
+                      }deg)`,
                 }}
               >
                 {/* FRONT: Classic Polaroid Style */}
@@ -167,13 +178,36 @@ export default function PolaroidScrapbook() {
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-parchment-200">
-                    <p className="text-[10px] text-espresso-600 font-semibold uppercase tracking-wider">
-                      {p.craftSecret}
-                    </p>
-                    <p className="font-handwritten text-sm text-terracotta mt-0.5">
-                      — Tisha Vaghasiya ♡
-                    </p>
+                  <div className="pt-3 border-t border-parchment-200 flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-espresso-600 font-semibold uppercase tracking-wider">
+                        {p.craftSecret}
+                      </p>
+                      <p className="font-handwritten text-sm text-terracotta mt-0.5">
+                        — Tisha Vaghasiya ♡
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        triggerHaptic('medium');
+                        const res = await shareOrCopy({
+                          title: `${p.title} — Founder's Journal (Kalapriti)`,
+                          text: `“${p.handwrittenBack}” — ${p.craftSecret}`,
+                          url: window.location.href,
+                        });
+                        if (res.result === 'shared') {
+                          showToast('Journal story shared!', undefined, 'share');
+                        } else if (res.result === 'copied') {
+                          showToast('Story copied to clipboard!', undefined, 'share');
+                        }
+                      }}
+                      className="p-1.5 rounded-full hover:bg-parchment-200 text-espresso-600 hover:text-terracotta transition-colors"
+                      title="Share journal story"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
               </div>

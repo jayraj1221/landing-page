@@ -15,6 +15,11 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { triggerHaptic } from '@/utils/haptics';
+import { proceduralAudio } from '@/utils/proceduralAudio';
+import { shareOrCopy } from '@/utils/webShare';
+import { useToast } from './ModernToast';
+import { executeViewTransition } from '@/utils/viewTransitions';
 
 interface OrderInquiryModalProps {
   isOpen: boolean;
@@ -37,6 +42,7 @@ export default function OrderInquiryModal({
   const [channelUsed, setChannelUsed] = useState<'instagram' | 'whatsapp'>('instagram');
   const [copied, setCopied] = useState(false);
   const [generatedMessage, setGeneratedMessage] = useState('');
+  const { showToast } = useToast();
 
   // Sync initial values when modal opens
   useEffect(() => {
@@ -119,7 +125,10 @@ export default function OrderInquiryModal({
     setGeneratedMessage(orderText);
     setChannelUsed('instagram');
 
-    // Automatically copy formatted message to clipboard
+    triggerHaptic('success');
+    proceduralAudio.playCraftChime(880);
+    showToast('Inquiry drafted! Copied to clipboard', 'Opening Instagram DM...', 'sparkle');
+
     copyToClipboard(orderText);
     setSubmitted(true);
     triggerConfetti();
@@ -135,6 +144,10 @@ export default function OrderInquiryModal({
     const orderText = composeOrderMessage();
     setGeneratedMessage(orderText);
     setChannelUsed('whatsapp');
+
+    triggerHaptic('success');
+    proceduralAudio.playCraftChime(880);
+    showToast('Opening WhatsApp...', 'Message copied to clipboard', 'sparkle');
 
     copyToClipboard(orderText);
 
@@ -153,17 +166,16 @@ export default function OrderInquiryModal({
   };
 
   const handleNativeShare = async () => {
-    if (typeof navigator !== 'undefined' && navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Kalapriti Custom Order Inquiry',
-          text: generatedMessage,
-        });
-      } catch {
-        // Share dismissed
-      }
-    } else {
-      copyToClipboard(generatedMessage);
+    triggerHaptic('medium');
+    const res = await shareOrCopy({
+      title: 'Kalapriti Custom Order Inquiry',
+      text: generatedMessage,
+      url: window.location.href,
+    });
+    if (res.result === 'shared') {
+      showToast('Inquiry shared!', undefined, 'share');
+    } else if (res.result === 'copied') {
+      showToast('Inquiry copied to clipboard!', undefined, 'share');
     }
   };
 
